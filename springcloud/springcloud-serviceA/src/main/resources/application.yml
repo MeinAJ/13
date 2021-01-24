@@ -1,0 +1,8 @@
+server:
+  port: 8761
+eureka:
+  client:
+    # 不注册自己,自己本身就是注册中心服务
+    registerWithEureka: false
+    # 不抓取服务,自己本身就是注册中心服务
+    fetchRegistry: false
