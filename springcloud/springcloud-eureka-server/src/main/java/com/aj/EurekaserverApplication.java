@@ -1,4 +1,4 @@
-package com.aj.springcloud.eurekaserver;
+package com.aj;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
