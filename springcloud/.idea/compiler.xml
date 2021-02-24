@@ -9,9 +9,11 @@
         <module name="springcloud-serviceB" />
         <module name="springcloud-serviceA" />
         <module name="springcloud-eureka-server" />
+        <module name="client" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="client" target="1.5" />
       <module name="springcloud" target="1.6" />
       <module name="springcloud-eureka-server" target="1.6" />
       <module name="springcloud-serviceA" target="1.6" />
