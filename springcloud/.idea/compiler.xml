@@ -6,15 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="springcloud-serviceB" />
         <module name="springcloud-serviceA" />
+        <module name="springcloud-client" />
         <module name="springcloud-eureka-server" />
-        <module name="client" />
+        <module name="netflix-ribbon" />
+        <module name="springcloud-serviceB" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="client" target="1.5" />
+      <module name="greeting-service" target="1.5" />
+      <module name="greeting-service-client" target="1.5" />
+      <module name="netflix-ribbon" target="1.5" />
       <module name="springcloud" target="1.6" />
+      <module name="springcloud-client" target="1.5" />
       <module name="springcloud-eureka-server" target="1.6" />
       <module name="springcloud-serviceA" target="1.6" />
       <module name="springcloud-serviceB" target="1.6" />
