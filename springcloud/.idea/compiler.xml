@@ -9,6 +9,8 @@
         <module name="springcloud-serviceA" />
         <module name="springcloud-client" />
         <module name="springcloud-eureka-server" />
+        <module name="springcloud-ribbin" />
+        <module name="register-client" />
         <module name="netflix-ribbon" />
         <module name="springcloud-serviceB" />
       </profile>
@@ -16,10 +18,13 @@
     <bytecodeTargetLevel>
       <module name="greeting-service" target="1.5" />
       <module name="greeting-service-client" target="1.5" />
+      <module name="jdk-concurrent" target="1.6" />
       <module name="netflix-ribbon" target="1.5" />
+      <module name="register-client" target="1.6" />
       <module name="springcloud" target="1.6" />
       <module name="springcloud-client" target="1.5" />
       <module name="springcloud-eureka-server" target="1.6" />
+      <module name="springcloud-ribbin" target="1.5" />
       <module name="springcloud-serviceA" target="1.6" />
       <module name="springcloud-serviceB" target="1.6" />
     </bytecodeTargetLevel>

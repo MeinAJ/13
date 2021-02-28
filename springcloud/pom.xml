@@ -18,7 +18,6 @@
         <module>springcloud-serviceB</module>
         <module>springcloud-client</module>
         <module>netflix-ribbon</module>
-        <module>jdk-concurrent</module>
     </modules>
 
     <dependencyManagement>

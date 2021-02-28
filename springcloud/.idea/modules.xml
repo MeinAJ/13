@@ -3,9 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/netflix-ribbon/netflix-ribbon.iml" filepath="$PROJECT_DIR$/netflix-ribbon/netflix-ribbon.iml" />
-      <module fileurl="file://$PROJECT_DIR$/springcloud.iml" filepath="$PROJECT_DIR$/springcloud.iml" />
-      <module fileurl="file://$PROJECT_DIR$/springcloud-client/springcloud-client.iml" filepath="$PROJECT_DIR$/springcloud-client/springcloud-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdk-concurrent/register-client/register-client.iml" filepath="$PROJECT_DIR$/jdk-concurrent/register-client/register-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/springcloud.iml" filepath="$PROJECT_DIR$/.idea/springcloud.iml" />
       <module fileurl="file://$PROJECT_DIR$/springcloud-eureka-server/springcloud-eureka-server.iml" filepath="$PROJECT_DIR$/springcloud-eureka-server/springcloud-eureka-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcloud-client/springcloud-ribbin.iml" filepath="$PROJECT_DIR$/springcloud-client/springcloud-ribbin.iml" />
       <module fileurl="file://$PROJECT_DIR$/springcloud-serviceA/springcloud-serviceA.iml" filepath="$PROJECT_DIR$/springcloud-serviceA/springcloud-serviceA.iml" />
       <module fileurl="file://$PROJECT_DIR$/springcloud-serviceB/springcloud-serviceB.iml" filepath="$PROJECT_DIR$/springcloud-serviceB/springcloud-serviceB.iml" />
     </modules>
