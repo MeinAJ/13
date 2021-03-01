@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class HeartbeatRequest {
 
-    private String instanceId;
+    private String serviceInstanceId;
+
+    private String serviceName;
 
 }

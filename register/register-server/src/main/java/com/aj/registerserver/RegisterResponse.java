@@ -7,8 +7,6 @@ import lombok.ToString;
 @ToString
 public class RegisterResponse {
 
-    private Integer code;
-
-    private String message;
+    private String status;
 
 }

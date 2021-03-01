@@ -13,5 +13,8 @@ public class RegisterRequest {
 
     private String serviceName;
 
-    private String instanceId;
+    private String serviceInstanceId;
+
+    private String hostname;
+
 }
