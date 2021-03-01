@@ -11,6 +11,7 @@
     <name>register</name>
     <modules>
         <module>register-client</module>
+        <module>register-server</module>
     </modules>
 
     <dependencies>

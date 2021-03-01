@@ -1,4 +1,4 @@
-package com.aj.registerclient;
+package com.aj.registerserver;
 
 import lombok.Data;
 
@@ -6,7 +6,5 @@ import lombok.Data;
 public class HeartbeatRequest {
 
     private String instanceId;
-
-    private String serviceName;
 
 }

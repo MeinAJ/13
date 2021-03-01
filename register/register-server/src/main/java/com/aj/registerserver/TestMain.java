@@ -1,10 +1,10 @@
-package com.aj.registerclient;
+package com.aj.registerserver;
 
 import java.util.UUID;
 
 public class TestMain {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         RegisterClient registerClient = new RegisterClient(UUID.randomUUID().toString().replaceAll("-", ""));
         registerClient.start();
     }
