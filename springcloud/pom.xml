@@ -16,7 +16,7 @@
         <module>springcloud-eureka-server</module>
         <module>springcloud-serviceA</module>
         <module>springcloud-serviceB</module>
-        <module>springcloud-client</module>
+        <module>springcloud-ribbon</module>
         <module>netflix-ribbon</module>
     </modules>
 
