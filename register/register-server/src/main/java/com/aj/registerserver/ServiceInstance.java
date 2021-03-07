@@ -36,7 +36,7 @@ public class ServiceInstance {
 
     class Lease {
 
-        private long lastRenewTime = System.currentTimeMillis();
+        private volatile long lastRenewTime = System.currentTimeMillis();
 
         public Boolean isAlive() {
             long currentTime = System.currentTimeMillis();

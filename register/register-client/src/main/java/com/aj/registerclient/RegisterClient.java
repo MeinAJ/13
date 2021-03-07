@@ -12,8 +12,19 @@ public class RegisterClient {
 
     private final String IP = "192.168.2.12";
 
+    private final HeartBeatWorker heartBeatWorker;
+
+    public volatile boolean isRunning;
+
     public RegisterClient(String instanceId) {
         this.instanceId = instanceId;
+        this.isRunning = true;
+        this.heartBeatWorker = new HeartBeatWorker();
+    }
+
+    public void shutdown() {
+        this.isRunning = false;
+        this.heartBeatWorker.interrupt();
     }
 
     public void start() throws InterruptedException {
@@ -23,7 +34,6 @@ public class RegisterClient {
         registerWorker.join();
         System.out.println();
 
-        HeartBeatWorker heartBeatWorker = new HeartBeatWorker();
         heartBeatWorker.setName("HeartBeatWorkerThread");
         heartBeatWorker.start();
     }
@@ -52,7 +62,7 @@ public class RegisterClient {
             heartbeatRequest.setInstanceId(instanceId);
             heartbeatRequest.setServiceName(SERVICE_NAME);
 
-            while (true) {
+            while (isRunning) {
                 HeartbeatResponse heartbeat = httpSender.heartbeat(heartbeatRequest);
                 System.out.println(Thread.currentThread().getName() + "线程,心跳结果=" + heartbeat);
                 try {
