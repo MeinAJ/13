@@ -8,6 +8,8 @@
       <list>
         <option value="$PROJECT_DIR$/register/pom.xml" />
         <option value="$PROJECT_DIR$/springcloud/pom.xml" />
+        <option value="$PROJECT_DIR$/conconcurrent/pom.xml" />
+        <option value="$PROJECT_DIR$/demoredis/pom.xml" />
       </list>
     </option>
   </component>
