@@ -1,0 +1,28 @@
+Java HotSpot(TM) 64-Bit Server VM (25.141-b15) for windows-amd64 JRE (1.8.0_141-b15), built on Jul 12 2017 04:25:12 by "java_re" with MS VC++ 10.0 (VS2010)
+Memory: 4k page, physical 33392180k(26231496k free), swap 35489332k(26171236k free)
+
+CommandLine flags: -XX:InitialHeapSize=10485760 -XX:MaxHeapSize=10485760 -XX:MaxNewSize=5242880 -XX:NewSize=5242880
+-XX:OldPLABSize=16 -XX:PretenureSizeThreshold=10485760 -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps
+-XX:SurvivorRatio=8 -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC
+-XX:-UseLargePagesIndividualAllocation -XX:+UseParNewGC
+
+//对象分配失败,开始进行gc
+//0.103表示过了0.103s后,发生了gc
+//ParNew: 4022K->512K(4608K), 0.0017059 secs  -> 4608K=eden+survivor1 4022K=eden占用空间 512K=剩余存活对象 0.0017059 secs=gc时间
+//4022K->1672K(9728K), 0.0018372 secs  -> 9728K=eden+survivor1+old 1672K=整个堆内存的使用空间
+0.103: [GC (Allocation Failure) 0.104: [ParNew: 4022K->512K(4608K), 0.0017059 secs] 4022K->1672K(9728K), 0.0018372 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+
+
+Heap
+// 新生代:total 4608K=4.5m可用 used 3745K=使用了剩余2048kb+512K=2560kb+1195kb的多余空间
+ par new generation   total 4608K, used 3745K [0x00000000ff600000, 0x00000000ffb00000, 0x00000000ffb00000)
+  eden space 4096K,  78% used [0x00000000ff600000, 0x00000000ff9286d0, 0x00000000ffa00000)
+  from space 512K, 100% used [0x00000000ffa80000, 0x00000000ffb00000, 0x00000000ffb00000)
+  to   space 512K,   0% used [0x00000000ffa00000, 0x00000000ffa00000, 0x00000000ffa80000)
+
+  //用了1160K,不知道是啥?
+  // Metaspace,class space放了啥?
+  // used capacity committed committed分别代表什么?
+ concurrent mark-sweep generation total 5120K, used 1160K [0x00000000ffb00000, 0x0000000100000000, 0x0000000100000000)
+ Metaspace       used 3375K, capacity 4496K, committed 4864K, committed 1056768K
+  class space    used 374K, capacity 388K, committed 512K, reserved 1048576K

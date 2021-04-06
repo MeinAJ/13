@@ -7,7 +7,8 @@ eureka:
     registerWithEureka: false
      #不抓取服务,自己本身就是注册中心服务
     fetchRegistry: false
-
+  instance:
+    hostname: 127.0.0.1
 #eureka:
 #  instance:
 #    hostname: peer2
