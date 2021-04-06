@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9091
 spring:
   application:
     name: ServiceA
@@ -9,6 +9,6 @@ eureka:
   client:
     serviceUrl:
       # 单机
-#      defaultZone: http://127.0.0.1:8761/eureka
+      defaultZone: http://127.0.0.1:8762/eureka
       # 集群
-      defaultZone: http://127.0.0.1:8761/eureka,http://127.0.0.1:8762/eureka
+#      defaultZone: http://127.0.0.1:8761/eureka,http://127.0.0.1:8762/eureka
