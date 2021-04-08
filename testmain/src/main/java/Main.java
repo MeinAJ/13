@@ -28,20 +28,46 @@ public class Main {
 //        byte[] array4 = new byte[2 * 1024 * 1024];
 //
 //        System.gc();
-        print();
+//        print();
+//        stackOom();
+//        heapOom();
+        metaspaceSize();
     }
 
-    public static void print() throws InterruptedException {
-        List<Data> datas = new ArrayList<Data>();
+    private static void metaspaceSize() {
+        Main main = new Main();
+        Main main1 = new Main();
 
-        for (int i = 0; i < 10000; i++) {
-            datas.add(new Data());
+        Class<? extends Main> aClass = main.getClass();
+        Class<? extends Main> aClass1 = main1.getClass();
+        System.out.println("1");
+    }
+
+    private static void heapOom() {
+        List<Main> list = new ArrayList<>();
+
+        while (true) {
+            list.add(new Main());
         }
-        Thread.sleep(3600000);
     }
 
-    static class Data {
-
+    private static void stackOom() {
+        int i = 0;
+        System.out.println(i);
+        stackOom();
     }
+
+//    public static void print() throws InterruptedException {
+//        List<Data> datas = new ArrayList<Data>();
+//
+//        for (int i = 0; i < 10000; i++) {
+//            datas.add(new Data());
+//        }
+//        Thread.sleep(3600000);
+//    }
+//
+//    static class Data {
+//
+//    }
 
 }
