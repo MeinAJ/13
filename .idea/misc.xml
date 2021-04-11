@@ -12,6 +12,9 @@
         <option value="$PROJECT_DIR$/demoredis/pom.xml" />
         <option value="$PROJECT_DIR$/demojvm/pom.xml" />
         <option value="$PROJECT_DIR$/demoes/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/demoredisson/pom.xml" />
+        <option value="$PROJECT_DIR$/demozk/pom.xml" />
       </list>
     </option>
   </component>
