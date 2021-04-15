@@ -30,9 +30,9 @@ public class Application {
         config.useSingleServer().setAddress("redis://192.168.2.52:6379");
         final RedissonClient redisson = Redisson.create(config);
 
-//        RLock lock = redisson.getLock("anyLock");
-//        lock.lock();
-//        lock.unlock();
+        RLock lock = redisson.getLock("anyLock");
+        lock.lock();
+        lock.unlock();
 //
 //        boolean b = lock.tryLock();
 //        b = lock.tryLock(10, TimeUnit.SECONDS);

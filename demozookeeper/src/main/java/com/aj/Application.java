@@ -12,8 +12,9 @@ import org.apache.curator.framework.recipes.locks.InterProcessMultiLock;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.apache.curator.framework.recipes.locks.InterProcessSemaphoreV2;
+import org.apache.curator.framework.recipes.locks.Lease;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * Application
@@ -30,7 +31,7 @@ public class Application {
                 retryPolicy);
         client.start();
 
-        String path = "/my/path" + System.currentTimeMillis();
+        String path = "/my/path/" + System.currentTimeMillis();
 
         //可重入锁
         InterProcessMutex lock = new InterProcessMutex(client, path);
@@ -39,9 +40,12 @@ public class Application {
 
         //Semaphore
         InterProcessSemaphoreV2 semaphore = new InterProcessSemaphoreV2(client, path, 2);
-        semaphore.acquire();
-        semaphore.acquire();
-        semaphore.acquire();
+        Lease acquire = semaphore.acquire();
+        semaphore.returnLease(acquire);
+        Lease acquire1 = semaphore.acquire();
+        semaphore.returnLease(acquire1);
+        Lease acquire2 = semaphore.acquire();
+        semaphore.returnLease(acquire2);
 
         //读写锁
         InterProcessReadWriteLock readWriteLock = new InterProcessReadWriteLock(client, path);
@@ -54,7 +58,7 @@ public class Application {
 
         //multilock
 
-        InterProcessMultiLock multiLock = new InterProcessMultiLock(client, Collections.singletonList(path));
+        InterProcessMultiLock multiLock = new InterProcessMultiLock(client, Arrays.asList(path, path + "1"));
         multiLock.acquire();
         multiLock.release();
     }
