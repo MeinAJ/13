@@ -13,7 +13,6 @@ import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.apache.curator.framework.recipes.locks.InterProcessSemaphoreV2;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-
 import java.util.Collections;
 
 /**
@@ -32,10 +31,6 @@ public class Application {
         client.start();
 
         String path = "/my/path" + System.currentTimeMillis();
-        client.create().creatingParentsIfNeeded().forPath(path, "hello world".getBytes());
-
-        System.out.println(new String(client.getData().forPath(path)));
-
 
         //可重入锁
         InterProcessMutex lock = new InterProcessMutex(client, path);
