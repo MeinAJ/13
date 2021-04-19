@@ -3,12 +3,12 @@ package com.aj.inventory.model;
 import lombok.Data;
 
 @Data
-public class User {
+public class News {
 
     private Long id;
 
-    private String name;
+    private String title;
 
-    private Integer age;
+    private String content;
 
 }

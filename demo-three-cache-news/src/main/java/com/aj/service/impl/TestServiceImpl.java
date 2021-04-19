@@ -28,10 +28,10 @@ public class TestServiceImpl implements TestService {
         return "模拟数据库保存";
     }
 
-    @CachePut
+    @CachePut(key = "'news_info_'+#typeId")
     public String update(String typeId) {
         System.out.println("update()执行了=============");
-        return "模拟数据库更新";
+        return "模拟数据库更新" + System.currentTimeMillis();
     }
 
     @CacheEvict
@@ -40,10 +40,10 @@ public class TestServiceImpl implements TestService {
         return "模拟数据库删除";
     }
 
-    @Cacheable
+    @Cacheable(key = "'news_info_'+#typeId")
     public String select(String typeId) {
         System.out.println("select()执行了=============");
-        return "模拟数据库查询";
+        return "模拟数据库查询" + System.currentTimeMillis();
     }
 
 }

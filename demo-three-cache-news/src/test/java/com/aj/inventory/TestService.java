@@ -1,4 +1,4 @@
-package com.aj.test;
+package com.aj.inventory;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +18,17 @@ public class TestService {
 
     @Autowired
     private com.aj.service.TestService testService;
+
+    @Test
+    public void test() {
+        String typeId = "type1111111111";
+        // 模拟第一次保存
+        String returnStr1 = testService.update(typeId);
+        System.out.println(returnStr1);
+        // 模拟第二次保存
+        String returnStr2 = testService.select(typeId);
+        System.out.println(returnStr2);
+    }
 
     @Test
     public void testSave() {
@@ -66,7 +77,7 @@ public class TestService {
 
     @Test
     public void testSelect() {
-        String typeId = "type111";
+        String typeId = "type1111";
         // 模拟第一次查询
         String returnStr1 = testService.select(typeId);
         System.out.println(returnStr1);

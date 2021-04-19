@@ -1,6 +1,8 @@
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
@@ -78,7 +80,6 @@ public class Main {
         jedis.setbit("setbit", 5, true);
         jedis.setbit("setbit", 6, true);
         jedis.setbit("setbit", 7, true);
-
 
         String luaStr =
                 "for i=2,ARGV[1],1 do " +

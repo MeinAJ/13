@@ -1,15 +1,9 @@
 package com.aj.redisson;
 
 import org.redisson.Redisson;
-import org.redisson.RedissonCountDownLatch;
-import org.redisson.RedissonRedLock;
-import org.redisson.RedissonSemaphore;
-import org.redisson.api.RCountDownLatch;
-import org.redisson.api.RLock;
-import org.redisson.api.RSemaphore;
+import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import java.util.concurrent.Semaphore;
 
 @SuppressWarnings("ALL")
 public class Application {
@@ -30,9 +24,9 @@ public class Application {
         config.useSingleServer().setAddress("redis://192.168.2.52:6379");
         final RedissonClient redisson = Redisson.create(config);
 
-        RLock lock = redisson.getLock("anyLock");
-        lock.lock();
-        lock.unlock();
+//        RLock lock = redisson.getLock("anyLock");
+//        lock.lock();
+//        lock.unlock();
 //
 //        boolean b = lock.tryLock();
 //        b = lock.tryLock(10, TimeUnit.SECONDS);
@@ -66,17 +60,17 @@ public class Application {
 //
 //        latch.await();
 
-        RSemaphore semaphore = redisson.getSemaphore("anySemaphore");
-        semaphore.trySetPermits(3);
-
-        semaphore.acquire();
-        semaphore.release();
-
-        semaphore.acquire();
-        semaphore.release();
-
-        semaphore.acquire();
-        semaphore.release();
+//        RSemaphore semaphore = redisson.getSemaphore("anySemaphore");
+//        semaphore.trySetPermits(3);
+//
+//        semaphore.acquire();
+//        semaphore.release();
+//
+//        semaphore.acquire();
+//        semaphore.release();
+//
+//        semaphore.acquire();
+//        semaphore.release();
 
 //        RLock fairLock = redisson.getFairLock("anyLock");
 //        fairLock.lock();
@@ -92,6 +86,18 @@ public class Application {
 //        writeLock.unlock();
 //
 //        System.out.println("over");
+        String s = "bloomfilter-" + System.currentTimeMillis();
+        RBloomFilter<Object> test = redisson.getBloomFilter(s);
+        boolean add0 = test.add("1");
+        boolean add1 = test.add("2");
+        boolean add2 = test.add("3");
+        boolean add3 = test.add("4");
+        boolean add4 = test.add("5");
+
+        boolean contains = test.contains("1");
+        System.out.println(contains);
+        contains = test.contains("6");
+        System.out.println(contains);
     }
 
 }
