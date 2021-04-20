@@ -26,8 +26,8 @@ public class RebuildCacheProcessor implements Runnable {
     private CuratorFramework curatorClient;
 
     public RebuildCacheProcessor() {
-        this.newsCacheService = (NewsCacheService) SpringContext.getApplicationContext().getBean("newsCacheService");
-        this.curatorClient = (CuratorFramework) SpringContext.getApplicationContext().getBean("curatorClient");
+        this.newsCacheService = SpringContext.getApplicationContext().getBean(NewsCacheService.class);
+        this.curatorClient = SpringContext.getApplicationContext().getBean(CuratorFramework.class);
     }
 
     @Override

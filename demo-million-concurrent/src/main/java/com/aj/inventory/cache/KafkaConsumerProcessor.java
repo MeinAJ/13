@@ -33,8 +33,8 @@ public class KafkaConsumerProcessor implements Runnable {
 
     public KafkaConsumerProcessor(KafkaStream kafkaStream) {
         this.kafkaStream = kafkaStream;
-        this.newsCacheService = (NewsCacheService) SpringContext.getApplicationContext().getBean("newsCacheService");
-        this.curatorClient = (CuratorFramework) SpringContext.getApplicationContext().getBean("curatorClient");
+        this.newsCacheService = (NewsCacheService) SpringContext.getApplicationContext().getBean(NewsCacheService.class);
+        this.curatorClient = (CuratorFramework) SpringContext.getApplicationContext().getBean(CuratorFramework.class);
     }
 
     @Override
