@@ -21,14 +21,28 @@ import java.net.URL;
 public class Application1 {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 1000; i++) {
-            new Thread(){
-                @Override
-                public void run() {
-                    get();
-                }
-            }.start();
+        boolean flag = true;
+        while (flag) {
+            try {
+                System.out.println(22);
+                flag = false;
+                continue;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("11");
+            }
         }
+
+//
+//        for (int i = 0; i < 1000; i++) {
+//            new Thread(){
+//                @Override
+//                public void run() {
+//                    get();
+//                }
+//            }.start();
+//        }
     }
 
     private static void get() {

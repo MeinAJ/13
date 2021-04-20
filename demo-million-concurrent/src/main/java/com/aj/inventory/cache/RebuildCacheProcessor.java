@@ -10,6 +10,7 @@ import com.aj.inventory.model.News;
 import com.aj.inventory.service.NewsCacheService;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -21,21 +22,36 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class RebuildCacheProcessor implements Runnable {
 
     private static final ArrayBlockingQueue<News> QUEUE = new ArrayBlockingQueue<>(1000);
+    private NewsCacheService newsCacheService;
+    private CuratorFramework curatorClient;
+
+    public RebuildCacheProcessor() {
+        this.newsCacheService = (NewsCacheService) SpringContext.getApplicationContext().getBean("newsCacheService");
+        this.curatorClient = (CuratorFramework) SpringContext.getApplicationContext().getBean("curatorClient");
+    }
 
     @Override
     public void run() {
         try {
-            News updateNews;
-            while ((updateNews = take()) != null) {
-                //todo 去更新redis和ehcache数据
-                NewsCacheService newsCacheService = (NewsCacheService) SpringContext.getApplicationContext().getBean("newsCacheService");
-                CuratorFramework curatorClient = (CuratorFramework) SpringContext.getApplicationContext().getBean("curatorClient");
-                InterProcessMutex lock = new InterProcessMutex(curatorClient, "/news/cache/lock/" + updateNews.getId());
-                lock.acquire();
-
-                newsCacheService.get
-
-                lock.release();
+            while (true) {
+                News updateNews = take();
+                assert updateNews != null;
+                InterProcessMutex lock = new InterProcessMutex(curatorClient, "/news/lock2/" + updateNews.getId());
+                try {
+                    lock.acquire();
+                    News oldNews = newsCacheService.getNewsInfoFromRedisCache(updateNews.getId());
+                    if (oldNews != null && oldNews.getId() != null) {
+                        if (oldNews.getUpdateTime() != null && updateNews.getUpdateTime() <= oldNews.getUpdateTime()) {
+                            continue;
+                        }
+                    }
+                    newsCacheService.setNewsInfo2LocalCache(updateNews);
+                    newsCacheService.setNewsInfo2RedisCache(updateNews);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    lock.release();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

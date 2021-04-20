@@ -1,6 +1,0 @@
-server:
-  port: 8000
-spring:
-  cache:
-    ehcache:
-      config: classpath:/ehcache/ehcache.xml

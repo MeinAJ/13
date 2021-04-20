@@ -12,6 +12,6 @@ public class News {
 
     private String content;
 
-    private LocalDateTime localDateTime;
+    private Long updateTime;
 
 }
