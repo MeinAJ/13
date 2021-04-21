@@ -22,8 +22,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class RebuildCacheProcessor implements Runnable {
 
     private static final ArrayBlockingQueue<News> QUEUE = new ArrayBlockingQueue<>(1000);
-    private NewsCacheService newsCacheService;
-    private CuratorFramework curatorClient;
+    private final NewsCacheService newsCacheService;
+    private final CuratorFramework curatorClient;
 
     public RebuildCacheProcessor() {
         this.newsCacheService = SpringContext.getApplicationContext().getBean(NewsCacheService.class);
