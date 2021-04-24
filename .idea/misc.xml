@@ -18,6 +18,7 @@
         <option value="$PROJECT_DIR$/demomain/pom.xml" />
         <option value="$PROJECT_DIR$/demo-million-concurrent/pom.xml" />
         <option value="$PROJECT_DIR$/demo-transactional/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-springcloud/pom.xml" />
       </list>
     </option>
   </component>

@@ -2,6 +2,7 @@ package com.aj.redisson;
 
 import org.redisson.Redisson;
 import org.redisson.api.RBloomFilter;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
@@ -21,12 +22,14 @@ public class Application {
 //        RedissonClient redisson = Redisson.create(config);
 
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://192.168.2.52:6379");
+        config.useSingleServer().setAddress("redis://192.168.0.103:7002").setPassword("redis-pass");
         final RedissonClient redisson = Redisson.create(config);
 
 //        RLock lock = redisson.getLock("anyLock");
 //        lock.lock();
+//        System.out.println("加锁");
 //        lock.unlock();
+//        System.out.println("解锁");
 //
 //        boolean b = lock.tryLock();
 //        b = lock.tryLock(10, TimeUnit.SECONDS);
@@ -86,8 +89,9 @@ public class Application {
 //        writeLock.unlock();
 //
 //        System.out.println("over");
-        String s = "bloomfilter-" + System.currentTimeMillis();
+        String s = "bloomfilter-";
         RBloomFilter<Object> test = redisson.getBloomFilter(s);
+        test.tryInit(100000000L,0.03);
         boolean add0 = test.add("1");
         boolean add1 = test.add("2");
         boolean add2 = test.add("3");
