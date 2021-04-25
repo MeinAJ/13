@@ -16,4 +16,7 @@ import java.util.List;
 public interface SensitiveService {
 
     List<Sensitive> listAll();
+
+    String checkComment(String comment);
+
 }

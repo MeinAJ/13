@@ -11,17 +11,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedissonConfig {
 
+//    @Bean
+//    public RedissonClient redissonClient() {
+//        Config config = new Config();
+//        config.useClusterServers()
+//                .addNodeAddress("redis://192.168.0.103:7001")
+//                .addNodeAddress("redis://192.168.0.103:7002")
+//                .addNodeAddress("redis://192.168.0.104:7003")
+//                .addNodeAddress("redis://192.168.0.104:7004")
+//                .addNodeAddress("redis://192.168.0.105:7005")
+//                .addNodeAddress("redis://192.168.0.105:7006")
+//                .setPassword("redis-pass");
+//        return Redisson.create(config);
+//    }
+
     @Bean
     public RedissonClient redissonClient() {
         Config config = new Config();
-        config.useClusterServers()
-                .addNodeAddress("redis://192.168.0.103:7001")
-                .addNodeAddress("redis://192.168.0.103:7002")
-                .addNodeAddress("redis://192.168.0.104:7003")
-                .addNodeAddress("redis://192.168.0.104:7004")
-                .addNodeAddress("redis://192.168.0.105:7005")
-                .addNodeAddress("redis://192.168.0.105:7006")
-                .setPassword("redis-pass");
+        config.useSingleServer().setAddress("redis://192.168.2.52:6379");
         return Redisson.create(config);
     }
 

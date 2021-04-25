@@ -17,14 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
  * @author An Jun
  * @date 2021-04-21
  */
-@Service(value = "testServiceImpl")
-public class TestServiceV2Impl implements TestService {
+@Service(value = "testServiceImplV2")
+public class TestServiceV2Impl implements TestServiceV2 {
 
     @Autowired
     private TestMapper testMapper;
 
     @Override
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.MANDATORY)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.MANDATORY)
     public void test() {
         long l = System.currentTimeMillis();
         testMapper.updateUser(l + "");

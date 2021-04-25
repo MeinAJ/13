@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * TestServiceImpl
  *
- * @author An Jun
+ * @author An Junorg.springframework.transaction.aspectj.AnnotationTransactionAspect
  * @date 2021-04-21
  */
 @Service(value = "testServiceImpl")
@@ -21,6 +21,9 @@ public class TestServiceImpl implements TestService {
 
     @Autowired
     private TestMapper testMapper;
+
+    @Autowired
+    private TestServiceV2 testServiceV2;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -30,6 +33,7 @@ public class TestServiceImpl implements TestService {
         System.out.println("修改用户=" + l);
         testMapper.updateNews((l + 1) + "");
         System.out.println("修改新闻=" + (l + 1));
+        testServiceV2.test();
     }
 
 }

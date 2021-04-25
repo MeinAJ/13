@@ -6,8 +6,8 @@ import com.aj.sensitive.filter.service.SensitiveService;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +20,7 @@ public class BloomFilterInit {
         DistributionLock distributionLock = applicationContext.getBean(DistributionLock.class);
         List<Sensitive> sensitiveList = sensitiveService.listAll();
         Set<String> sensitiveWordSet = new HashSet<>();
-        if (!StringUtils.isEmpty(sensitiveList)) {
+        if (!CollectionUtils.isEmpty(sensitiveList)) {
             System.out.println("尝试获取锁");
             if (distributionLock.tryLock()) {
                 try {
@@ -30,6 +30,7 @@ public class BloomFilterInit {
                     filter.tryInit(100000L, 0.01);
                     for (Sensitive sensitive : sensitiveList) {
                         if (!StringUtils.isEmpty(sensitive.getWord()) && sensitiveWordSet.add(sensitive.getWord())) {
+                            System.out.println("word=" + sensitive.getWord());
                             filter.add(sensitive.getWord());
                         }
                     }
@@ -42,7 +43,8 @@ public class BloomFilterInit {
                 }
             }
         }
-        sensitiveWordSet = null;//help gc
+        //help gc
+        sensitiveWordSet = null;
     }
 
 }
