@@ -2,11 +2,9 @@ package com.aj.sensitive.filter.listener;
 
 import com.aj.sensitive.filter.bloomfilter.BloomFilterInit;
 import com.aj.sensitive.filter.context.SpringContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -28,4 +26,5 @@ public class InitListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
         //do nothing
     }
+
 }

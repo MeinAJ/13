@@ -41,17 +41,32 @@ public class SensitiveServiceImpl implements SensitiveService {
 
     @Override
     public String checkComment(String comment) {
+        System.out.println("comment=" + comment);
         Set<String> wordSet = getWordSet(comment);
         boolean hasSensitiveWord = false;
         if (!CollectionUtils.isEmpty(wordSet)) {
-            RBloomFilter<Object> filter = redissonClient.getBloomFilter("sensitive-word-bloom-filter-test");
-            for (String word : wordSet) {
-                if (hasSensitiveWord = filter.contains(word)) {
-                    break;
+            try {
+                RBloomFilter<Object> filter = redissonClient.getBloomFilter("sensitive-word-bloom-filter-test");
+                for (String word : wordSet) {
+                    System.out.println("word=" + word);
+                    if (hasSensitiveWord = filter.contains(word)) {
+                        break;
+                    }
                 }
+            } catch (Exception e) {
+                Long count = sensitiveMapper.getOnePossibleWord(getWordString(wordSet));
+                hasSensitiveWord = (count != null && count > 0);
             }
         }
         return hasSensitiveWord ? "fail" : "success";
+    }
+
+    private String getWordString(Set<String> wordSet) {
+        StringBuilder stringBuffer = new StringBuilder();
+        for (String word : wordSet) {
+            stringBuffer.append("'").append(word).append("'").append(",");
+        }
+        return stringBuffer.toString().substring(0, stringBuffer.toString().length() - 1);
     }
 
     private Set<String> getWordSet(String comment) {
@@ -68,7 +83,6 @@ public class SensitiveServiceImpl implements SensitiveService {
             CharTermAttribute term = ts.getAttribute(CharTermAttribute.class);
             //遍历分词数据
             while (ts.incrementToken()) {
-                System.out.println(term.toString());
                 wordSet.add(term.toString());
             }
             reader.close();
