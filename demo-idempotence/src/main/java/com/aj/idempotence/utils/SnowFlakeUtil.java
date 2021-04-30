@@ -11,6 +11,7 @@ package com.aj.idempotence.utils;
  * @author An Jun
  * @date 2021-04-30
  */
+@SuppressWarnings("all")
 public class SnowFlakeUtil {
 
     private long workerId;
@@ -37,28 +38,39 @@ public class SnowFlakeUtil {
 
     private long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits; //  时间毫秒数左移22位
 
-    private long sequenceMask = -1L ^ (-1L << sequenceBits);                          // 用于和当前时间戳做比较，以获取最新时间
+    /**
+     * 用于和当前时间戳做比较，以获取最新时间
+     */
+    private long sequenceMask = -1L ^ (-1L << sequenceBits);
 
     private long lastTimestamp = -1L;
 
-    //成员类，SnowFlakeUtil的实例对象的保存域
+    /**
+     * 成员类，SnowFlakeUtil的实例对象的保存域
+     */
     private static class IdGenHolder {
 
         private static final SnowFlakeUtil INSTANCE = new SnowFlakeUtil();
 
     }
 
-    //外部调用获取SnowFlakeUtil的实例对象，确保不可变
+    /**
+     * 外部调用获取SnowFlakeUtil的实例对象，确保不可变
+     */
     public static SnowFlakeUtil get() {
         return IdGenHolder.INSTANCE;
     }
 
-    //初始化构造，无参构造有参函数，默认节点都是0
+    /**
+     * 初始化构造，无参构造有参函数，默认节点都是0
+     */
     public SnowFlakeUtil() {
         this(0L, 0L);
     }
 
-    //设置机器节点和数据中心节点数，都是 0-31
+    /**
+     * 设置机器节点和数据中心节点数，都是 0-31
+     */
     public SnowFlakeUtil(long workerId, long datacenterId) {
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
@@ -101,7 +113,9 @@ public class SnowFlakeUtil {
                 | (workerId << workerIdShift) | sequence;
     }
 
-    //比较当前时间和过去时间，防止时钟回退（机器问题），保证给的都是最新时间/最大时间
+    /**
+     * 比较当前时间和过去时间，防止时钟回退（机器问题），保证给的都是最新时间/最大时间
+     */
     protected long tilNextMillis(long lastTimestamp) {
         long timestamp = timeGen();
         while (timestamp <= lastTimestamp) {
@@ -110,7 +124,9 @@ public class SnowFlakeUtil {
         return timestamp;
     }
 
-    //获取当前的时间戳（毫秒）
+    /**
+     * 获取当前的时间戳（毫秒）
+     */
     protected long timeGen() {
         return System.currentTimeMillis();
     }
@@ -119,8 +135,8 @@ public class SnowFlakeUtil {
      * 获取全局唯一编码
      */
     public static String getId() {
-        Long id = SnowFlakeUtil.get().nextId();
-        return id.toString();
+        long id = SnowFlakeUtil.get().nextId();
+        return Long.toString(id);
     }
 
 }
