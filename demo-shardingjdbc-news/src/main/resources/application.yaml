@@ -53,7 +53,7 @@ spring:
           precise-algorithm-class-name: com.aj.shardingjdbc.news.config.PreciseModuloDatabaseShardingAlgorithm
           sharding-column: create_time
       tables:
-        news:
+        newsvisit:
           actual-data-nodes: news$->{2020..2024}.t_news_visit_0$->{1..9},news$->{2020..2024}.t_news_visit_1$->{0..2}
           key-generator:
             column: id
@@ -62,4 +62,13 @@ spring:
             standard:
               precise-algorithm-class-name: com.aj.shardingjdbc.news.config.PreciseModuloTableShardingAlgorithm
               sharding-column: create_time
+        news:
+          actual-data-nodes: custom.t_news_0${0..9}
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: t_news_0${id.longValue() % 10}
       default-data-source-name: custom #库分片策略为none时一定要设置默认数据源，否则应用无法启动

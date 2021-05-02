@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aj.shardingjdbc.news.dao.NewsDao">
+    <insert id="addNews" parameterType="com.aj.shardingjdbc.news.domain.News">
+        INSERT INTO news (
+        title,content
+        )
+        VALUES (
+        #{title},
+        #{content}
+        )
+    </insert>
+
+    <select id="getNews" resultType="com.aj.shardingjdbc.news.domain.News">
+        select * from news
+    </select>
+</mapper>

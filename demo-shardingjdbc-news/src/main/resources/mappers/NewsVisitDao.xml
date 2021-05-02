@@ -11,7 +11,7 @@
     </resultMap>
 
     <insert id="addNewsVisit" parameterType="com.aj.shardingjdbc.news.domain.NewsVisit">
-        INSERT INTO news (
+        INSERT INTO newsvisit (
         news_id,user_id,province,ip,create_time
         )
         VALUES (
@@ -24,6 +24,6 @@
     </insert>
 
     <select id="getNewsVisit" resultMap="baseResultMap">
-        select * from news where create_time > #{createTime} limit 10
+        select * from newsvisit
     </select>
 </mapper>

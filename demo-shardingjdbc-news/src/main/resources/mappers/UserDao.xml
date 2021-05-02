@@ -12,6 +12,6 @@
     </insert>
 
     <select id="getUser" resultType="com.aj.shardingjdbc.news.domain.User">
-        select * from news where create_time > #{createTime} limit 10
+        select * from t_user
     </select>
 </mapper>
