@@ -20,6 +20,7 @@
         <option value="$PROJECT_DIR$/demo-transactional/pom.xml" />
         <option value="$PROJECT_DIR$/demo-springcloud/pom.xml" />
         <option value="$PROJECT_DIR$/demo-idempotence/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-shardingjdbc-news/pom.xml" />
       </list>
     </option>
   </component>

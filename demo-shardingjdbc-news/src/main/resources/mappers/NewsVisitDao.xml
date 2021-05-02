@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aj.shardingjdbc.news.dao.NewsVisitDao">
+    <resultMap id="baseResultMap" type="com.aj.shardingjdbc.news.domain.NewsVisit">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="news_id" property="newsId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="addNewsVisit" parameterType="com.aj.shardingjdbc.news.domain.NewsVisit">
+        INSERT INTO news (
+        news_id,user_id,province,ip,create_time
+        )
+        VALUES (
+        #{newsId,jdbcType=INTEGER},
+        #{userId,jdbcType=INTEGER},
+        #{province,jdbcType=VARCHAR},
+        #{ip,jdbcType=VARCHAR},
+        #{createTime,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <select id="getNewsVisit" resultMap="baseResultMap">
+        select * from news where create_time > #{createTime} limit 10
+    </select>
+</mapper>

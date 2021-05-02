@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+mybatis:
+  mapper-locations: classpath*:mappers/*Dao.xml
+
+spring:
+  main:
+    allow-bean-definition-overriding=true:
+  shardingsphere:
+    props:
+      sql:
+        show: true
+    datasource:
+      names: news2020,news2021,news2022,news2023,news2024
+      news2020:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.0.113:3306/t_news_2020?characterEncoding=utf-8
+        username: root
+        password: 016312Aj.713
+      news2021:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.0.113:3306/t_news_2021?characterEncoding=utf-8
+        username: root
+        password: 016312Aj.713
+      news2022:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.0.113:3306/t_news_2022?characterEncoding=utf-8
+        username: root
+        password: 016312Aj.713
+      news2023:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.0.113:3306/t_news_2023?characterEncoding=utf-8
+        username: root
+        password: 016312Aj.713
+      news2024:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.0.113:3306/t_news_2024?characterEncoding=utf-8
+        username: root
+        password: 016312Aj.713
+    sharding:
+      default-database-strategy:
+        standard:
+          precise-algorithm-class-name: com.aj.shardingjdbc.news.config.PreciseModuloDatabaseShardingAlgorithm
+          sharding-column: create_time
+      tables:
+        news:
+          actual-data-nodes: news$->{2020..2024}.t_news_visit_0$->{1..9},news$->{2020..2024}.t_news_visit_1$->{0..2}
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+          table-strategy:
+            standard:
+              precise-algorithm-class-name: com.aj.shardingjdbc.news.config.PreciseModuloTableShardingAlgorithm
+              sharding-column: create_time
