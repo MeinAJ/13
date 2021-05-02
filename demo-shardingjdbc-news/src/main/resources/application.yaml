@@ -5,14 +5,18 @@ mybatis:
   mapper-locations: classpath*:mappers/*Dao.xml
 
 spring:
-  main:
-    allow-bean-definition-overriding=true:
   shardingsphere:
     props:
       sql:
         show: true
     datasource:
-      names: news2020,news2021,news2022,news2023,news2024
+      names: custom,news2020,news2021,news2022,news2023,news2024
+      custom:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://192.168.0.113:3306/custom?characterEncoding=utf-8
+        username: root
+        password: 016312Aj.713
       news2020:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
@@ -58,3 +62,4 @@ spring:
             standard:
               precise-algorithm-class-name: com.aj.shardingjdbc.news.config.PreciseModuloTableShardingAlgorithm
               sharding-column: create_time
+      default-data-source-name: custom #库分片策略为none时一定要设置默认数据源，否则应用无法启动
