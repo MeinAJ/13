@@ -1,7 +1,8 @@
 news:
   datasource:
     type: com.alibaba.druid.pool.xa.DruidXADataSource
-    url: jdbc:mysql://192.168.0.113:3306/custom?useUnicode=true&characterEncoding=utf-8
+    #    url: jdbc:mysql://192.168.0.113:3306/custom?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/custom?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 016312Aj.713
     driverClassName: com.mysql.jdbc.Driver
@@ -22,7 +23,8 @@ news:
 user:
   datasource:
     type: com.alibaba.druid.pool.xa.DruidXADataSource
-    url: jdbc:mysql://192.168.0.113:3306/custom1?useUnicode=true&characterEncoding=utf-8
+    #    url: jdbc:mysql://192.168.0.113:3306/custom1?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/custom1?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 016312Aj.713
     driverClassName: com.mysql.jdbc.Driver
@@ -43,3 +45,5 @@ user:
 jta:
   log-dir: classpath:tx-logs
   transaction-manager-id: txManager
+server:
+  port: 8888

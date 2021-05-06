@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.jta.JtaTransactionManager;
-
 import javax.sql.DataSource;
 import javax.transaction.UserTransaction;
 import java.sql.SQLException;
@@ -30,38 +29,55 @@ public class UserDataSourceConfig {
 
     @Value("${user.datasource.url}")
     private String dbUrl;
+
     @Value("${user.datasource.username}")
     private String username;
+
     @Value("${user.datasource.password}")
     private String password;
+
     @Value("${user.datasource.driverClassName}")
     private String driverClassName;
+
     @Value("${user.datasource.initialSize}")
     private int initialSize;
+
     @Value("${user.datasource.minIdle}")
     private int minIdle;
+
     @Value("${user.datasource.maxActive}")
     private int maxActive;
+
     @Value("${user.datasource.maxWait}")
     private int maxWait;
+
     @Value("${user.datasource.timeBetweenEvictionRunsMillis}")
     private int timeBetweenEvictionRunsMillis;
+
     @Value("${user.datasource.minEvictableIdleTimeMillis}")
     private int minEvictableIdleTimeMillis;
+
     @Value("${user.datasource.validationQuery}")
     private String validationQuery;
+
     @Value("${user.datasource.testWhileIdle}")
     private boolean testWhileIdle;
+
     @Value("${user.datasource.testOnBorrow}")
     private boolean testOnBorrow;
+
     @Value("${user.datasource.testOnReturn}")
     private boolean testOnReturn;
+
     @Value("${user.datasource.poolPreparedStatements}")
     private boolean poolPreparedStatements;
+
     @Value("${user.datasource.maxPoolPreparedStatementPerConnectionSize}")
     private int maxPoolPreparedStatementPerConnectionSize;
+
     @Value("${user.datasource.filters}")
     private String filters;
+
     @Value("${user.datasource.connectionProperties}")
     private String connectionProperties;
 
@@ -70,9 +86,9 @@ public class UserDataSourceConfig {
      *
      * @return
      */
-    @Bean(name = "newsDataSource")
+    @Bean(name = "userDataSource")
     @Primary
-    public DataSource newsDataSource() {
+    public DataSource userDataSource() {
         DruidXADataSource datasource = new DruidXADataSource();
         datasource.setUrl(this.dbUrl);
         datasource.setUsername(username);
