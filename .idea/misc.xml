@@ -23,6 +23,7 @@
         <option value="$PROJECT_DIR$/demo-shardingjdbc-news/pom.xml" />
         <option value="$PROJECT_DIR$/sharding-jdbc/pom.xml" />
         <option value="$PROJECT_DIR$/demo-atomikos/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-jdk/pom.xml" />
       </list>
     </option>
   </component>
