@@ -1,0 +1,13 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: demo-server
+
+eureka:
+  instance:
+    hostname: 127.0.0.1
+
+  server:
+    enableSelfPreservation: false

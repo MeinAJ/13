@@ -1,0 +1,38 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: demo-zuul
+
+eureka:
+  instance:
+    hostname: 127.0.0.1
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/,http://127.0.0.1:8762/eureka/
+
+zuul:
+  retryable: true
+  routes:
+    demo-service:
+      path: /api/v1/**
+    demo-news:
+      path: /api/v1/**
+    demo-user:
+      path: /api/v1/**
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 45000
+
+ribbon:
+  ConnectTimeout: 5000
+  ReadTimeout: 5000
+  OkToRetryOnAllOperations: true
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 1

@@ -1,0 +1,20 @@
+server:
+  port: 9008
+
+spring:
+  application:
+    name: demo-service
+
+eureka:
+  instance:
+    hostname: 127.0.0.1
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 3000
+  OkToRetryOnAllOperations: true
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 1

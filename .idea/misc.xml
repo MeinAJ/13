@@ -1,33 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="JavaScriptSettings">
-    <option name="languageLevel" value="ES6" />
-  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/register/pom.xml" />
-        <option value="$PROJECT_DIR$/springcloud/pom.xml" />
-        <option value="$PROJECT_DIR$/conconcurrent/pom.xml" />
-        <option value="$PROJECT_DIR$/demoredis/pom.xml" />
-        <option value="$PROJECT_DIR$/demojvm/pom.xml" />
-        <option value="$PROJECT_DIR$/demoes/pom.xml" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/demoredisson/pom.xml" />
-        <option value="$PROJECT_DIR$/demozookeeper/pom.xml" />
-        <option value="$PROJECT_DIR$/demomain/pom.xml" />
-        <option value="$PROJECT_DIR$/demo-million-concurrent/pom.xml" />
-        <option value="$PROJECT_DIR$/demo-transactional/pom.xml" />
-        <option value="$PROJECT_DIR$/demo-springcloud/pom.xml" />
-        <option value="$PROJECT_DIR$/demo-idempotence/pom.xml" />
-        <option value="$PROJECT_DIR$/demo-shardingjdbc-news/pom.xml" />
-        <option value="$PROJECT_DIR$/sharding-jdbc/pom.xml" />
-        <option value="$PROJECT_DIR$/demo-atomikos/pom.xml" />
-        <option value="$PROJECT_DIR$/demo-jdk/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-bytecc-news/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-bytecc-news-api/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-bytecc-server/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-bytecc-service/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-bytecc-user/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-bytecc-user-api/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>
