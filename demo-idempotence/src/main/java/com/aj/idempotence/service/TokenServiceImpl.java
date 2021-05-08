@@ -25,11 +25,15 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public boolean tokenIsOk(String token) {
-        if (StringUtils.hasLength(token)) {
-            RBucket<String> bucket = redissonClient.getBucket(token);
-            return bucket.delete();
+        try {
+            if (StringUtils.hasLength(token)) {
+                RBucket<String> bucket = redissonClient.getBucket(token);
+                return bucket.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return false;
+        return true;
     }
 
 }
