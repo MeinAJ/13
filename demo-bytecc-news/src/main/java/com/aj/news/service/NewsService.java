@@ -5,15 +5,17 @@ import com.aj.news.api.domain.News;
 import com.aj.news.mapper.NewsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Configuration
 public class NewsService implements NewsApi {
 
     @Autowired
     private NewsMapper newsMapper;
 
-    @Value(value = "#{server.port}")
+    @Value("${server.port}")
     private String port;
 
     @Override

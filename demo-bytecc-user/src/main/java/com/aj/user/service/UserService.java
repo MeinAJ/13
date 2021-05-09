@@ -12,7 +12,8 @@ public class UserService implements UserApi {
 
     @Autowired
     private UserMapper userMapper;
-    @Value(value = "#{server.port}")
+
+    @Value("${server.port}")
     private String port;
 
     @Override
