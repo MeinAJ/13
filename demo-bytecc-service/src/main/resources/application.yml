@@ -6,7 +6,7 @@ spring:
     name: demo-service
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.0.113:3306/custom?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://192.168.0.113:3306/custom2?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 016312Aj.713
     driverClassName: com.mysql.jdbc.Driver

@@ -4,16 +4,15 @@ import com.aj.news.api.api.NewsApi;
 import com.aj.news.api.domain.News;
 import com.aj.news.mapper.NewsMapper;
 import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
-import org.bytesoft.compensable.Compensable;
 import org.bytesoft.compensable.CompensableContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController
-@Compensable(interfaceClass = NewsApi.class, confirmableKey = "newsServiceConfirm", cancellableKey = "newsServiceCancel")
-public class NewsService implements NewsApi, CompensableContextAware {
+@Service(value = "newsServiceCancel")
+@RequestMapping("/api/v1/news/cancel")
+public class NewsServiceCancel implements NewsApi, CompensableContextAware {
 
     @Autowired
     private NewsMapper newsMapper;
@@ -22,10 +21,10 @@ public class NewsService implements NewsApi, CompensableContextAware {
 
     @Override
     @Transactional
-    public void addNews(@RequestBody News news) {
-        newsMapper.addNews(news);
-        compensableContext.setVariable("id", news.getId());
-        System.out.println("创建新闻，id=" + news.getId());
+    public void addNews(News news) {
+        Long id = (Long) compensableContext.getVariable("id");
+        newsMapper.deleteNews(id);
+        System.out.println("删除刚才新建的新闻，id=" + id);
     }
 
     @Override
