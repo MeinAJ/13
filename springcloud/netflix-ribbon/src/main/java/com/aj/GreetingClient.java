@@ -30,17 +30,17 @@ public class GreetingClient {
 //            String result = response.getEntity(String.class);
 //            System.out.println(result);
 //        }
-        ILoadBalancer balancer = new BaseLoadBalancer();
-
-        List<Server> servers = new ArrayList<Server>();
-        servers.add(new Server("localhost", 8080));
-        servers.add(new Server("localhost", 8088));
-        balancer.addServers(servers);
-
-        for (int i = 0; i < 10; i++) {
-            Server server = balancer.chooseServer(null);
-            System.out.println(server);
-        }
+//        ILoadBalancer balancer = new BaseLoadBalancer();
+//
+//        List<Server> servers = new ArrayList<Server>();
+//        servers.add(new Server("localhost", 8080));
+//        servers.add(new Server("localhost", 8088));
+//        balancer.addServers(servers);
+//
+//        for (int i = 0; i < 10; i++) {
+//            Server server = balancer.chooseServer(null);
+//            System.out.println(server);
+//        }
     }
 
 }
