@@ -1,10 +1,10 @@
 package com.aj;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 @SuppressWarnings("ALL")
 public class Main {
@@ -85,19 +85,62 @@ public class Main {
 //            }
 //        });
 //
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(
-                0,
-                Integer.MAX_VALUE,
-                60L,
-                TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>());
+//        ThreadPoolExecutor executor = new ThreadPoolExecutor(
+//                0,
+//                Integer.MAX_VALUE,
+//                60L,
+//                TimeUnit.SECONDS,
+//                new SynchronousQueue<Runnable>());
+//
+//        executor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                System.out.println(Thread.currentThread().getName());
+//            }
+//        });
+        ReentrantLock lock = new ReentrantLock();
+        Condition condition = lock.newCondition();
 
-        executor.execute(new Runnable() {
+        new Thread() {
             @Override
             public void run() {
-                System.out.println(Thread.currentThread().getName());
+                printThreadName();
+                printTime();
+                try {
+                    condition.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                printOver();
             }
-        });
+        }.start();
+
+        new Thread() {
+            @Override
+            public void run() {
+                printThreadName();
+                printTime();
+                try {
+                    Thread.sleep(2000);
+                    condition.notifyAll();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                printOver();
+            }
+        }.start();
+    }
+
+    private static void printThreadName() {
+        System.out.println(Thread.currentThread().getName());
+    }
+
+    private static void printTime() {
+        System.out.println(LocalDateTime.now());
+    }
+
+    private static void printOver() {
+        System.out.println(Thread.currentThread().getName() + ",执行完");
     }
 
     private static void sleep() {
