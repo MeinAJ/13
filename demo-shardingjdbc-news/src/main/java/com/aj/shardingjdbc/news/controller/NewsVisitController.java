@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -22,6 +21,8 @@ public class NewsVisitController {
         NewsVisit newsVisit = new NewsVisit();
         if (time == null) {
             newsVisit.setCreateTime(System.currentTimeMillis() / 1000);
+        } else {
+            newsVisit.setCreateTime(time);
         }
         newsVisit.setIp("127.0.0.1");
         newsVisit.setNewsId(1L);
@@ -34,8 +35,16 @@ public class NewsVisitController {
 
     @GetMapping(value = "/get")
     public String addNewsVisit() {
-        NewsVisit newsVisit = new NewsVisit();
         List<NewsVisit> list = newsVisitService.getNewsVisit();
+        System.out.println("size=" + list.size());
+        System.out.println(list);
+        return "success";
+    }
+
+    @GetMapping(value = "/page")
+    public String addNewsVisit(@RequestParam(value = "offset") Integer offset,
+                               @RequestParam(value = "limit") Integer limit) {
+        List<NewsVisit> list = newsVisitService.page(offset, limit);
         System.out.println("size=" + list.size());
         System.out.println(list);
         return "success";

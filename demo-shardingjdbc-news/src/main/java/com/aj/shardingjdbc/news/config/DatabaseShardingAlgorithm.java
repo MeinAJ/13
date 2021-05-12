@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
-public class PreciseModuloDatabaseShardingAlgorithm implements PreciseShardingAlgorithm<Long> {
+public class DatabaseShardingAlgorithm implements PreciseShardingAlgorithm<Long> {
     @Override
     public String doSharding(Collection<String> collection, PreciseShardingValue<Long> preciseShardingValue) {
         //对于库的分片collection存放的是所有的库的列表，这里代表ds2020~ds2021

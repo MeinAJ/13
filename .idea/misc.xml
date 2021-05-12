@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/demozookeeper/pom.xml" />
         <option value="$PROJECT_DIR$/reference/pom.xml" />
         <option value="$PROJECT_DIR$/demo-main/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-lru/pom.xml" />
       </list>
     </option>
   </component>

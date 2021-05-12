@@ -11,19 +11,19 @@
     </resultMap>
 
     <insert id="addNewsVisit" parameterType="com.aj.shardingjdbc.news.domain.NewsVisit">
-        INSERT INTO newsvisit (
-        news_id,user_id,province,ip,create_time
-        )
-        VALUES (
-        #{newsId,jdbcType=INTEGER},
-        #{userId,jdbcType=INTEGER},
-        #{province,jdbcType=VARCHAR},
-        #{ip,jdbcType=VARCHAR},
-        #{createTime,jdbcType=INTEGER}
-        )
+        INSERT INTO newsvisit (news_id, user_id, province, ip, create_time)
+        VALUES (#{newsId,jdbcType=INTEGER},
+                #{userId,jdbcType=INTEGER},
+                #{province,jdbcType=VARCHAR},
+                #{ip,jdbcType=VARCHAR},
+                #{createTime,jdbcType=INTEGER})
     </insert>
 
     <select id="getNewsVisit" resultMap="baseResultMap">
         select * from newsvisit
+    </select>
+
+    <select id="page" resultMap="baseResultMap">
+        select * from newsvisit limit #{offset} , #{limit}
     </select>
 </mapper>

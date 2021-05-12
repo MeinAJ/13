@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -25,7 +24,6 @@ public class UserController {
         userService.addUser(user);
         return "success";
     }
-
 
     @GetMapping(value = "/get")
     public String addNewsVisit() {

@@ -14,43 +14,43 @@ spring:
       custom:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.0.113:3306/custom?characterEncoding=utf-8
+        url: jdbc:mysql://127.0.0.1:3306/custom?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: 016312Aj.713
       news2020:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.0.113:3306/t_news_2020?characterEncoding=utf-8
+        url: jdbc:mysql://127.0.0.1:3306/t_news_2020?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: 016312Aj.713
       news2021:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.0.113:3306/t_news_2021?characterEncoding=utf-8
+        url: jdbc:mysql://127.0.0.1:3306/t_news_2021?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: 016312Aj.713
       news2022:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.0.113:3306/t_news_2022?characterEncoding=utf-8
+        url: jdbc:mysql://127.0.0.1:3306/t_news_2022?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: 016312Aj.713
       news2023:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.0.113:3306/t_news_2023?characterEncoding=utf-8
+        url: jdbc:mysql://127.0.0.1:3306/t_news_2023?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: 016312Aj.713
       news2024:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.0.113:3306/t_news_2024?characterEncoding=utf-8
+        url: jdbc:mysql://127.0.0.1:3306/t_news_2024?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: 016312Aj.713
     sharding:
       default-database-strategy:
         standard:
-          precise-algorithm-class-name: com.aj.shardingjdbc.news.config.PreciseModuloDatabaseShardingAlgorithm
+          precise-algorithm-class-name: com.aj.shardingjdbc.news.config.DatabaseShardingAlgorithm
           sharding-column: create_time
       tables:
         newsvisit:
@@ -60,7 +60,7 @@ spring:
             type: SNOWFLAKE
           table-strategy:
             standard:
-              precise-algorithm-class-name: com.aj.shardingjdbc.news.config.PreciseModuloTableShardingAlgorithm
+              precise-algorithm-class-name: com.aj.shardingjdbc.news.config.TableShardingAlgorithm
               sharding-column: create_time
         news:
           actual-data-nodes: custom.t_news_0${0..9}
