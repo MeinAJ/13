@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @date 2021-05-12
  */
 @SuppressWarnings("ALL")
-public class CustomLRUCacheImpl<E> implements LRUCache<E> {
+public class CustomLRUCacheImpl<E> implements LRUCacheApi<E> {
 
     public static void main(String[] args) {
         CustomLRUCacheImpl<String> cache = new CustomLRUCacheImpl<>();

@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @date 2021-05-12
  */
 @SuppressWarnings("ALL")
-public class LRUCacheImpl<E> implements LRUCache<E> {
+public class LRUCacheImpl<E> implements LRUCacheApi<E> {
 
     private final Integer CAPACITY = 10;
 
