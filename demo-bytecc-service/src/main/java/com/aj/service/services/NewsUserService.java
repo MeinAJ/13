@@ -31,8 +31,11 @@ public class NewsUserService implements NewsUserApi, CompensableContextAware {
     @Override
     @Transactional
     public void addNewsUser() {
-        newsUserMapper.addNewsUser(new NewsUser());
+        NewsUser newsUser = new NewsUser();
+        newsUserMapper.addNewsUser(newsUser);
+        compensableContext.setVariable("id", newsUser.getId());
         System.out.println("创建新闻用户");
+
         userService.addUser(new User());
         newsService.addNews(new News());
     }
