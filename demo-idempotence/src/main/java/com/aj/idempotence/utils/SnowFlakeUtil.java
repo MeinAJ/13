@@ -5,6 +5,9 @@
 
 package com.aj.idempotence.utils;
 
+import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * SnowFlake
  *
@@ -13,6 +16,12 @@ package com.aj.idempotence.utils;
  */
 @SuppressWarnings("all")
 public class SnowFlakeUtil {
+
+    private long capacity = 3600000;
+
+    HashMap<Long, Long> clockBackMillisMap = new HashMap<>();
+
+    ReentrantLock lock = new ReentrantLock();
 
     private long workerId;
 
@@ -83,34 +92,50 @@ public class SnowFlakeUtil {
     }
 
     //线程安全的id生成方法
-    @SuppressWarnings("all")
-    public synchronized long nextId() {
-        //获取当前毫秒数
-        long timestamp = timeGen();
-        //如果服务器时间有问题(时钟后退) 报错。
-        if (timestamp < lastTimestamp) {
-            throw new RuntimeException(String.format(
-                    "Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
+    public long nextId() {
+        try {
+            lock.lock();
+            //获取当前毫秒数
+            long timestamp = timeGen();
+            //如果服务器时间有问题(时钟后退) 报错。
+            if (timestamp < lastTimestamp) {
+                return getNextIdWhenClockBack(timestamp);
+            }
+            //如果上次生成时间和当前时间相同,在同一毫秒内
+            if (lastTimestamp == timestamp) {
+                //sequence自增，因为sequence只有12bit，所以和sequenceMask相与一下，去掉高位
+                sequence = (sequence + 1) & sequenceMask;
+                //判断是否溢出,也就是每毫秒内超过4095，当为4096时，与sequenceMask相与，sequence就等于0
+                if (sequence == 0) {
+                    //自旋等待到下一毫秒
+                    timestamp = tilNextMillis(lastTimestamp);
+                }
+            } else {
+                //如果和上次生成时间不同,重置sequence，就是下一毫秒开始，sequence计数重新从0开始累加，每个毫秒时间内，都是从0开始计数，最大4095
+                sequence = 0L;
+            }
+            lastTimestamp = timestamp;
+            // 最后按照规则拼出ID 64位
+            // 000000000000000000000000000000000000000000  00000            00000       000000000000
+            //1位固定整数   time                                       datacenterId   workerId    sequence
+            clockBackMillisMap.put(lastTimestamp, sequence);
+            return ((timestamp - twepoch) << timestampLeftShift) | (datacenterId << datacenterIdShift)
+                    | (workerId << workerIdShift) | sequence;
+        } finally {
+            lock.unlock();
         }
-        //如果上次生成时间和当前时间相同,在同一毫秒内
-        if (lastTimestamp == timestamp) {
-            //sequence自增，因为sequence只有12bit，所以和sequenceMask相与一下，去掉高位
-            sequence = (sequence + 1) & sequenceMask;
+    }
+
+    private long getNextIdWhenClockBack(long timestamp) {
+        if (clockBackMillisMap.containsKey(timestamp)) {
+            long seq = clockBackMillisMap.get(timestamp);
+            seq = (seq + 1) & sequenceMask;
             //判断是否溢出,也就是每毫秒内超过4095，当为4096时，与sequenceMask相与，sequence就等于0
             if (sequence == 0) {
                 //自旋等待到下一毫秒
                 timestamp = tilNextMillis(lastTimestamp);
             }
-        } else {
-            //如果和上次生成时间不同,重置sequence，就是下一毫秒开始，sequence计数重新从0开始累加，每个毫秒时间内，都是从0开始计数，最大4095
-            sequence = 0L;
         }
-        lastTimestamp = timestamp;
-        // 最后按照规则拼出ID 64位
-        // 000000000000000000000000000000000000000000  00000            00000       000000000000
-        //1位固定整数   time                                       datacenterId   workerId    sequence
-        return ((timestamp - twepoch) << timestampLeftShift) | (datacenterId << datacenterIdShift)
-                | (workerId << workerIdShift) | sequence;
     }
 
     /**
