@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/demo-atomikos/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/demo-main/pom.xml" />
+        <option value="$PROJECT_DIR$/reference/LFUCache/pom.xml" />
       </list>
     </option>
   </component>
