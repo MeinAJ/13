@@ -1,10 +1,17 @@
 package com.aj.lfu;
 
+@SuppressWarnings("ALL")
 public class Demo {
 
     public static void main(String args[]) {
         LFUCache<Integer, Integer> cache = new LFUCache<Integer, Integer>(10);
+        cache.set(1, 1);
+        cache.get(1);
+        cache.get(1);
+        cache.get(1);
+    }
 
+    private static void getSet(LFUCache<Integer, Integer> cache) {
         cache.set(10, 13);
         cache.set(3, 17);
         cache.set(6, 11);
@@ -114,8 +121,6 @@ public class Demo {
         cache.set(9, 26);
         cache.set(13, 28);
         cache.set(11, 26);
-
-
     }
 
 }

@@ -26,9 +26,9 @@ public class LFUCache<K, V> {
     public LFUCache(int capacity) {
         this.capacity = capacity;
         size = 0;
-        kvStore = new HashMap<K, LFUCacheEntry<K, V>>();
+        kvStore = new HashMap<>();
         freqList = new NodeList();
-        frequencyMap = new HashMap<Integer, FrequencyNode>();
+        frequencyMap = new HashMap<>();
     }
 
     public void delete(LFUCacheEntry<K, V> entry) {
@@ -90,7 +90,7 @@ public class LFUCache<K, V> {
         if (newFrequencyNode == null) {
             newFrequencyNode = getFrequencyNode(1);
         }
-        LFUCacheEntry<K, V> entry = new LFUCacheEntry<K, V>(key, value,
+        LFUCacheEntry<K, V> entry = new LFUCacheEntry<>(key, value,
                 newFrequencyNode);
         kvStore.put(key, entry);
         newFrequencyNode.lfuCacheEntryList.append(entry);
