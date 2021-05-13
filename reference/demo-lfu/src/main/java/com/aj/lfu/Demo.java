@@ -4,13 +4,11 @@ package com.aj.lfu;
 public class Demo {
 
     public static void main(String args[]) {
-//        LFUCache<Integer, Integer> cache = new LFUCache<Integer, Integer>(10);
-//        cache.set(1, 1);
-//        cache.get(1);
-//        cache.get(1);
-//        cache.get(1);
-
-        new
+        LFUCache<Integer, Integer> cache = new LFUCache<Integer, Integer>(10);
+        cache.set(1, 1);
+        cache.get(1);
+        cache.get(1);
+        cache.get(1);
 
     }
 

@@ -8,7 +8,19 @@ package com.aj.lru;
 import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-class LRUCache {
+class LRUCacheA {
+
+    public static void main(String[] args) {
+        LRUCacheA cache = new LRUCacheA(2);
+        //[[2],[2,1],[1,1],[2,3],[4,1],[1],[2]]
+        cache.put(2, 1);
+        cache.put(1, 1);
+        cache.put(2, 3);
+        cache.put(4, 1);
+
+        System.out.println(cache.get(1));
+        System.out.println(cache.get(2));
+    }
 
     Integer capacity;
 
@@ -22,7 +34,7 @@ class LRUCache {
 
     ReentrantLock lock = new ReentrantLock();
 
-    public LRUCache(Integer capacity) {
+    public LRUCacheA(Integer capacity) {
         this.capacity = capacity;
     }
 
@@ -83,7 +95,8 @@ class LRUCache {
                     Node tmpTail = this.tail;
                     this.tail = tail.pre;
                     this.tail.next = null;
-                    cache.remove(tmpTail.node.key);
+                    Node removeValue = cache.remove(tmpTail.node.key);
+                    System.out.println("内存空间不足,移除缓存,key=" + tmpTail.node.key + ",value=" + removeValue.node.value);
 
                     tmpTail = null;
 
