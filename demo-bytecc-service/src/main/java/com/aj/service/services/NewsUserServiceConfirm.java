@@ -1,6 +1,5 @@
 package com.aj.service.services;
 
-import com.aj.service.domain.NewsUser;
 import org.bytesoft.bytetcc.supports.spring.aware.CompensableContextAware;
 import org.bytesoft.compensable.CompensableContext;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,8 @@ public class NewsUserServiceConfirm implements NewsUserApi, CompensableContextAw
     @Override
     @Transactional
     public void addNewsUser() {
-        System.out.println("confirm新闻用户");
+        Long id = (Long) compensableContext.getVariable("id");
+        System.out.println("confirm新闻用户,id=" + id);
     }
 
     @Override
