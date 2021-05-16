@@ -14,8 +14,11 @@
         <option value="$PROJECT_DIR$/demo-lru/pom.xml" />
         <option value="$PROJECT_DIR$/reference/demo-lfu/pom.xml" />
         <option value="$PROJECT_DIR$/demo-idempotence/pom.xml" />
+        <option value="$PROJECT_DIR$/reference/ecp-uid/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
 </project>
