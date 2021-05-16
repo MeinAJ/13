@@ -136,6 +136,8 @@ public class SnowFlakeUtil {
                 timestamp = tilNextMillis(lastTimestamp);
             }
         }
+        //todo
+        return 0;
     }
 
     /**
