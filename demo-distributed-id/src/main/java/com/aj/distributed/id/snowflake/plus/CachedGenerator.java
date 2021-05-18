@@ -76,9 +76,8 @@ public class CachedGenerator {
     private final AtomicBoolean generating = new AtomicBoolean(false);
 
     private void init() {
-        long lastTimeStamp = lastSecond.getAndIncrement();
 
-        long prefix = ((lastTimeStamp) << timestampLeftShift) | (workerInfo.getWorkerId() << workerIdShift);
+        long prefix = getIncrementPrefix();
 
         for (int index = 0; index < capacity; index++) {
             long id = idGenerator(prefix, index);
@@ -102,9 +101,7 @@ public class CachedGenerator {
                 if (flag) {
                     //开始缓存一半的id
 
-                    long lastTimeStamp = lastSecond.getAndIncrement();
-
-                    long prefix = ((lastTimeStamp) << timestampLeftShift) | (workerInfo.getWorkerId() << workerIdShift);
+                    long prefix = getIncrementPrefix();
 
                     for (int i = 0; i < threshold; i++) {
                         int index = tail.incrementAndGet();
@@ -124,6 +121,11 @@ public class CachedGenerator {
             }
             return index;
         }
+    }
+
+    private long getIncrementPrefix() {
+        long lastTimeStamp = lastSecond.getAndIncrement();
+        return ((lastTimeStamp) << timestampLeftShift) | (workerInfo.getWorkerId() << workerIdShift);
     }
 
     public Long nextId() throws Exception {
