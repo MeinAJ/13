@@ -7,7 +7,4 @@
     <artifactId>demo-practice</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
-    <modules>
-        <module>demo-algorithm</module>
-    </modules>
 </project>

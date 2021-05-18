@@ -15,6 +15,8 @@
         <option value="$PROJECT_DIR$/reference/demo-lfu/pom.xml" />
         <option value="$PROJECT_DIR$/demo-idempotence/pom.xml" />
         <option value="$PROJECT_DIR$/reference/ecp-uid/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-distributed-id/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-million-concurrent/pom.xml" />
       </list>
     </option>
   </component>
