@@ -226,13 +226,6 @@
 			<version>1.2.58</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- junit 多线程测试 -->
-		<dependency>
-			<groupId>net.sourceforge.groboutils</groupId>
-			<artifactId>groboutils-core</artifactId>
-			<version>5</version>
-			<scope>test</scope>
-		</dependency> 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
