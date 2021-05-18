@@ -53,6 +53,8 @@ public class CachedGenerator {
 
     private final int capacity = 4096;
 
+    private final int threshold = capacity >> 1;
+
     private final Long[] ringBuffer = new Long[capacity];
 
     private final Boolean[] ringBufferFlag = new Boolean[capacity];
@@ -60,6 +62,8 @@ public class CachedGenerator {
     private AtomicInteger cursor = new AtomicInteger(-1);
 
     private AtomicInteger tail = new AtomicInteger(0);
+
+    private AtomicInteger used = new AtomicInteger(0);
 
     private final ReentrantLock outOfIndexLock = new ReentrantLock();
 
@@ -102,7 +106,7 @@ public class CachedGenerator {
 
                     long prefix = ((lastTimeStamp) << timestampLeftShift) | (workerInfo.getWorkerId() << workerIdShift);
 
-                    for (int i = 0; i < capacity >> 1; i++) {
+                    for (int i = 0; i < threshold; i++) {
                         int index = tail.incrementAndGet();
                         index = getArrayValidIndex(index);
 
@@ -124,44 +128,25 @@ public class CachedGenerator {
 
     public Long nextId() throws Exception {
         int index = cursor.getAndIncrement();
-        if (index + 1 == capacity) {
+        if (index + 1 >= capacity) {
             if (outOfIndexLock.tryLock()) {
                 //尝试获取锁成功
                 System.out.println("尝试获取锁成功");
-                cursor.set(-1);
+                cursor.set(0);
+                index = 0;
+                outOfIndexLock.unlock();
             }
-            outOfIndexLock.unlock();
-            return null;
         }
-        Boolean flag = ringBufferFlag[index];
-        if (!flag) {
-            return null;
+        if (ringBufferFlag[index]) {
+            ringBufferFlag[index] = false;
+            used.incrementAndGet();
+            return ringBuffer[index];
         }
-        ringBufferFlag[index] = false;
-        return ringBuffer[index];
+        return null;
     }
 
     private boolean emptyMoreThan50() {
-        int cursorCount = cursor.get();
-        int tailCount = tail.get();
-        if (cursorCount > tailCount) {
-            int abs = Math.abs(cursorCount - tailCount);
-            if (abs >= (capacity >> 1)) {
-                return true;
-            }
-        } else if (cursorCount < tailCount) {
-            int usedId = capacity - tailCount + cursorCount;
-            if (usedId >= (capacity >> 1)) {
-                return true;
-            }
-        } else {
-            //同时出现时，可能是没有任何值获取id，或者是已经用完了
-            //检查一下数组位置是false时，就消耗完了id
-            if (ringBufferFlag[0] == false) {
-                return true;
-            }
-        }
-        return false;
+        return used.get() >= threshold;
     }
 
 }
