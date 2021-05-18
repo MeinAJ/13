@@ -8,45 +8,44 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        ReentrantLock lock = new ReentrantLock();
-        Condition condition = lock.newCondition();
-
-        ArrayBlockingQueue queue = new ArrayBlockingQueue<String>(100);
-
-        Thread thread1 = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    System.out.println("kaishi");
-                    Object take = queue.take();
-                    System.out.println(take);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread1.setName("queue.take");
-        thread1.start();
-
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                    queue.put("111");
-                    System.out.println("queue.put(\"111\");");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.setName("queue.put");
-        thread.start();
-
-        while (true) {
-        }
-
-
+//        ReentrantLock lock = new ReentrantLock();
+//        Condition condition = lock.newCondition();
+//
+//        ArrayBlockingQueue queue = new ArrayBlockingQueue<String>(100);
+//
+//        Thread thread1 = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    System.out.println("kaishi");
+//                    Object take = queue.take();
+//                    System.out.println(take);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//        thread1.setName("queue.take");
+//        thread1.start();
+//
+//        Thread thread = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(5000);
+//                    queue.put("111");
+//                    System.out.println("queue.put(\"111\");");
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//        thread.setName("queue.put");
+//        thread.start();
+//
+//        while (true) {
+//        }
+//
     }
 //
 //    private static void test() {
