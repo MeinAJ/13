@@ -58,9 +58,9 @@ public class CachedGenerator {
 
     private final Boolean[] ringBufferFlag = new Boolean[capacity];
 
-    private AtomicInteger cursor;
+    private int cursor;
 
-    private AtomicInteger tail;
+    private int tail;
 
     private AtomicInteger used;
 
@@ -103,16 +103,16 @@ public class CachedGenerator {
 
                     long prefix = getPrefix();
                     for (int i = 0; i < threshold; i++) {
-                        int newIndex = getValidIndex(tail.get());
-                        System.out.println("当前tail=" + tail.get());
+                        int newIndex = getValidIndex(tail);
+                        System.out.println("当前tail=" + tail);
                         System.out.println("有效tail=" + newIndex);
-                        if (tail.get() != newIndex) {
+                        if (tail != newIndex) {
                             //newIndex肯定为0,tail肯定为capacity
-                            tail = new AtomicInteger(newIndex);
+                            tail = newIndex;
                         }
                         ringBuffer[newIndex] = idGenerator(prefix, i);
                         ringBufferFlag[newIndex] = true;
-                        tail.incrementAndGet();
+                        tail++;
                         System.out.println("修改后tail=" + tail);
                     }
 
@@ -149,18 +149,15 @@ public class CachedGenerator {
         //加锁
         try {
             nextIdLock.lock();
-            if (isOutOfBound(cursor.get())) {
+            if (isOutOfBound(cursor)) {
                 System.out.println("超过环,重新从头开始");
-                cursor = new AtomicInteger(0);
+                cursor = 0;
             }
-            if (ringBufferFlag[cursor.get()]) {
+            if (ringBufferFlag[cursor]) {
                 //这个cursor位置的id是可用的
-                ringBufferFlag[cursor.get()] = false;
-
+                ringBufferFlag[cursor] = false;
                 used.incrementAndGet();
-                cursor.incrementAndGet();
-
-                return ringBuffer[cursor.get()];
+                return ringBuffer[cursor++];
             }
             return null;
         } finally {
