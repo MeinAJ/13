@@ -6,7 +6,6 @@
 package com.aj.distributed.id.snowflake.plus;
 
 import com.aj.distributed.id.init.WorkerInfo;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -59,13 +58,13 @@ public class CachedGenerator {
 
     private final Boolean[] ringBufferFlag = new Boolean[capacity];
 
-    private AtomicInteger cursor = new AtomicInteger(-1);
+    private AtomicInteger cursor;
 
-    private AtomicInteger tail = new AtomicInteger(0);
+    private AtomicInteger tail;
 
-    private AtomicInteger used = new AtomicInteger(0);
+    private AtomicInteger used;
 
-    private final ReentrantLock outOfIndexLock = new ReentrantLock();
+    private final ReentrantLock nextIdLock = new ReentrantLock(true);
 
     private final AtomicLong lastSecond = new AtomicLong(System.currentTimeMillis() / 1000 - 1621267200L);
 
@@ -77,7 +76,7 @@ public class CachedGenerator {
 
     private void init() {
 
-        long prefix = getIncrementPrefix();
+        long prefix = getPrefix();
 
         for (int index = 0; index < capacity; index++) {
             long id = idGenerator(prefix, index);
@@ -85,66 +84,92 @@ public class CachedGenerator {
             ringBufferFlag[index] = true;
         }
 
-        //定时调度去检查可用id少于百分之50时，就去生成百分之50放入缓存中
-        threadPoolExecutor.scheduleWithFixedDelay(new TaskThread(), 0, 500, TimeUnit.MILLISECONDS);
+        //定时1s调度去检查可用id少于百分之50时，就去生成百分之50放入缓存中
+        threadPoolExecutor.scheduleWithFixedDelay(new RingBufferFillTask(), 0, 1000, TimeUnit.MILLISECONDS);
     }
 
     private long idGenerator(long prefix, int index) {
         return prefix | (index + 1) & sequenceMask;
     }
 
-    private class TaskThread implements Runnable {
+    private class RingBufferFillTask implements Runnable {
+
         @Override
         public void run() {
             if (generating.compareAndSet(false, true)) {
-                boolean flag = emptyMoreThan50();
-                if (flag) {
+                if (emptyMoreThan50()) {
+                    System.out.println("空id超过一半");
                     //开始缓存一半的id
 
-                    long prefix = getIncrementPrefix();
-
+                    long prefix = getPrefix();
                     for (int i = 0; i < threshold; i++) {
-                        int index = tail.incrementAndGet();
-                        index = getArrayValidIndex(index);
-
-                        ringBuffer[index] = idGenerator(prefix, i);
-                        ringBufferFlag[index] = true;
+                        int newIndex = getValidIndex(tail.get());
+                        System.out.println("当前tail=" + tail.get());
+                        System.out.println("有效tail=" + newIndex);
+                        if (tail.get() != newIndex) {
+                            //newIndex肯定为0,tail肯定为capacity
+                            tail = new AtomicInteger(newIndex);
+                        }
+                        ringBuffer[newIndex] = idGenerator(prefix, i);
+                        ringBufferFlag[newIndex] = true;
+                        tail.incrementAndGet();
+                        System.out.println("修改后tail=" + tail);
                     }
+
+                    int usedCount = used.get();
+                    System.out.println("used修改前," + usedCount);
+
+                    //cas设置已使用id
+                    while (used.compareAndSet(usedCount, (usedCount = usedCount - threshold))) {
+                        //do nothing
+                        //空转
+                    }
+
+                    System.out.println("used修改后," + usedCount);
                 }
                 generating.set(false);
             }
         }
 
-        private int getArrayValidIndex(int index) {
+        private int getValidIndex(int index) {
             if (index >= capacity) {
                 index = 0;
             }
             return index;
         }
+
     }
 
-    private long getIncrementPrefix() {
+    private long getPrefix() {
         long lastTimeStamp = lastSecond.getAndIncrement();
         return ((lastTimeStamp) << timestampLeftShift) | (workerInfo.getWorkerId() << workerIdShift);
     }
 
     public Long nextId() throws Exception {
-        int index = cursor.getAndIncrement();
-        if (index + 1 >= capacity) {
-            if (outOfIndexLock.tryLock()) {
-                //尝试获取锁成功
-                System.out.println("尝试获取锁成功");
-                cursor.set(0);
-                index = 0;
-                outOfIndexLock.unlock();
+        //加锁
+        try {
+            nextIdLock.lock();
+            if (isOutOfBound(cursor.get())) {
+                System.out.println("超过环,重新从头开始");
+                cursor = new AtomicInteger(0);
             }
+            if (ringBufferFlag[cursor.get()]) {
+                //这个cursor位置的id是可用的
+                ringBufferFlag[cursor.get()] = false;
+
+                used.incrementAndGet();
+                cursor.incrementAndGet();
+
+                return ringBuffer[cursor.get()];
+            }
+            return null;
+        } finally {
+            nextIdLock.unlock();
         }
-        if (ringBufferFlag[index]) {
-            ringBufferFlag[index] = false;
-            used.incrementAndGet();
-            return ringBuffer[index];
-        }
-        return null;
+    }
+
+    private boolean isOutOfBound(int index) {
+        return index >= capacity || index < 0;
     }
 
     private boolean emptyMoreThan50() {
