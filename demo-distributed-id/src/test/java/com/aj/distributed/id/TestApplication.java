@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Test
@@ -18,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author An Jun
  * @date 2021-05-18
  */
+@SuppressWarnings("ALL")
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestApplication {
@@ -25,11 +28,21 @@ public class TestApplication {
     @Autowired
     private CachedGenerator cachedGenerator;
 
+    private final AtomicInteger count = new AtomicInteger(0);
+
+    private final ConcurrentHashMap<Long, Long> map = new ConcurrentHashMap<>();
+
     @Test
     public void test1() {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 1025; i++) {
             nextId();
         }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("ddd");
     }
 
     public void nextId() {
@@ -37,7 +50,13 @@ public class TestApplication {
             @Override
             public void run() {
                 try {
-                    System.out.println(cachedGenerator.nextId());
+                    Long id = cachedGenerator.nextId();
+                    if (id != null) {
+                        count.incrementAndGet();
+                        map.put(id, id);
+                    } else{
+                        System.out.println("id不存在");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

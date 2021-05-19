@@ -32,10 +32,10 @@ public class CachedGenerator {
     }
 
     //  物理节点ID长度
-    private final long workerIdBits = 10L;
+    private final long workerIdBits = 8L;
 
     //  序列号12位， 4095，同毫秒内生成不同id的最大个数
-    private final long sequenceBits = 12L;
+    private final long sequenceBits = 14L;
 
     private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
@@ -50,7 +50,7 @@ public class CachedGenerator {
      */
     private final int usedCapacity = 50;
 
-    private final int capacity = 4096;
+    private final int capacity = 1 << sequenceBits;
 
     private final int threshold = capacity >> 1;
 
@@ -62,7 +62,7 @@ public class CachedGenerator {
 
     private int tail;
 
-    private AtomicInteger used;
+    private AtomicInteger used = new AtomicInteger(0);
 
     private final ReentrantLock nextIdLock = new ReentrantLock(true);
 
@@ -83,7 +83,6 @@ public class CachedGenerator {
             ringBuffer[index] = id;
             ringBufferFlag[index] = true;
         }
-
         //定时1s调度去检查可用id少于百分之50时，就去生成百分之50放入缓存中
         threadPoolExecutor.scheduleWithFixedDelay(new RingBufferFillTask(), 0, 1000, TimeUnit.MILLISECONDS);
     }
@@ -98,14 +97,11 @@ public class CachedGenerator {
         public void run() {
             if (generating.compareAndSet(false, true)) {
                 if (emptyMoreThan50()) {
-                    System.out.println("空id超过一半");
+                    System.out.println("已使用=" + used.get());
                     //开始缓存一半的id
-
                     long prefix = getPrefix();
                     for (int i = 0; i < threshold; i++) {
                         int newIndex = getValidIndex(tail);
-                        System.out.println("当前tail=" + tail);
-                        System.out.println("有效tail=" + newIndex);
                         if (tail != newIndex) {
                             //newIndex肯定为0,tail肯定为capacity
                             tail = newIndex;
@@ -113,19 +109,15 @@ public class CachedGenerator {
                         ringBuffer[newIndex] = idGenerator(prefix, i);
                         ringBufferFlag[newIndex] = true;
                         tail++;
-                        System.out.println("修改后tail=" + tail);
                     }
 
                     int usedCount = used.get();
-                    System.out.println("used修改前," + usedCount);
-
                     //cas设置已使用id
-                    while (used.compareAndSet(usedCount, (usedCount = usedCount - threshold))) {
+                    while (used.compareAndSet(usedCount, (usedCount - threshold))) {
                         //do nothing
                         //空转
                     }
-
-                    System.out.println("used修改后," + usedCount);
+                    System.out.println("生成id后,已使用=" + used.get());
                 }
                 generating.set(false);
             }
@@ -150,19 +142,26 @@ public class CachedGenerator {
         try {
             nextIdLock.lock();
             if (isOutOfBound(cursor)) {
-                System.out.println("超过环,重新从头开始");
                 cursor = 0;
             }
             if (ringBufferFlag[cursor]) {
                 //这个cursor位置的id是可用的
                 ringBufferFlag[cursor] = false;
-                used.incrementAndGet();
+                //cas设置已使用id
+                int usedCount = used.get();
+                while (used.compareAndSet(usedCount, (usedCount + 1))) {
+                }
+                System.out.println("cursor=" + cursor);
+                System.out.println("used=" + used.get());
                 return ringBuffer[cursor++];
             }
             return null;
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             nextIdLock.unlock();
         }
+        return null;
     }
 
     private boolean isOutOfBound(int index) {
