@@ -17,6 +17,9 @@
         <option value="$PROJECT_DIR$/reference/ecp-uid/pom.xml" />
         <option value="$PROJECT_DIR$/demo-distributed-id/pom.xml" />
         <option value="$PROJECT_DIR$/demo-million-concurrent/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-redisson/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-springcloud/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-algorithm/pom.xml" />
       </list>
     </option>
   </component>
