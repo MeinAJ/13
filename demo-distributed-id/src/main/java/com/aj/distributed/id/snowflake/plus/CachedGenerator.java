@@ -70,8 +70,6 @@ public class CachedGenerator {
 
     private final ScheduledExecutorService threadPoolExecutor = Executors.newSingleThreadScheduledExecutor();
 
-    private final ExecutorService singleThreadExecutorService = Executors.newSingleThreadExecutor();
-
     private final AtomicBoolean generating = new AtomicBoolean(false);
 
     private void init() {
