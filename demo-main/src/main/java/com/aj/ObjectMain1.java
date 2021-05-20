@@ -17,6 +17,8 @@ public class ObjectMain1 {
             dic.insert(line);
         }
 
+        System.out.println("dd");
+
         while (true){
             Thread.sleep(10000);
         }
