@@ -7,6 +7,7 @@ package com.aj.sensitive.filter.service;
 
 import com.aj.sensitive.filter.domain.Sensitive;
 import com.aj.sensitive.filter.mapper.SensitiveMapper;
+import com.aj.sensitive.filter.trie.TrieTree;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -54,8 +55,13 @@ public class SensitiveServiceImpl implements SensitiveService {
                     }
                 }
             } catch (Exception e) {
-                Long count = sensitiveMapper.getOnePossibleWord(getWordString(wordSet));
-                hasSensitiveWord = (count != null && count > 0);
+                TrieTree dic = TrieTree.getInstance;
+                for (String word : wordSet) {
+                    hasSensitiveWord = dic.search(word);
+                    if (hasSensitiveWord) {
+                        break;
+                    }
+                }
             }
         }
         return hasSensitiveWord ? "fail" : "success";

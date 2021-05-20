@@ -3,6 +3,7 @@ package com.aj.sensitive.filter.bloomfilter;
 import com.aj.sensitive.filter.domain.Sensitive;
 import com.aj.sensitive.filter.lock.DistributionLock;
 import com.aj.sensitive.filter.service.SensitiveService;
+import com.aj.sensitive.filter.trie.TrieTree;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.springframework.context.ApplicationContext;
@@ -33,6 +34,8 @@ public class BloomFilterInit {
                             System.out.println("word=" + sensitive.getWord());
                             filter.add(sensitive.getWord());
                         }
+                        //同时将敏感词转成trie树
+                        TrieTree.getInstance.insert(sensitive.getWord());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -45,6 +48,8 @@ public class BloomFilterInit {
         }
         //help gc
         sensitiveWordSet = null;
+
+
     }
 
 }
