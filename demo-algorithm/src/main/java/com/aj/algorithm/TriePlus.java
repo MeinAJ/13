@@ -17,13 +17,22 @@ import java.util.Map;
  * boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
  * boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
  */
-class Trie {
+@SuppressWarnings("ALL")
+class TriePlus {
 
     public static void main(String[] args) {
-        Trie trie = new Trie();
-        trie.insert("a");
-        System.out.println(trie.search("a"));
-        System.out.println(trie.startsWith("a"));
+        TriePlus trie = new TriePlus();
+        trie.insertCheckExists("a");
+        trie.insertCheckExists("a");
+        trie.insertCheckExists("b");
+        trie.insertCheckExists("b");
+        trie.insertCheckExists("b");
+
+        trie.insertCheckExists("ba");
+        trie.insertCheckExists("ba");
+        trie.insertCheckExists("ba");
+
+        System.out.println(1);
     }
 
     private final Dictory dictory;
@@ -31,7 +40,7 @@ class Trie {
     /**
      * Initialize your data structure here.
      */
-    public Trie() {
+    public TriePlus() {
         dictory = new Dictory();
     }
 
@@ -67,6 +76,48 @@ class Trie {
                 topNode.length = length;
             }
         }
+    }
+
+    public boolean insertCheckExists(String word) {
+        char[] chars = word.toCharArray();
+        int length = chars.length;
+        char firstLetter = chars[0];
+        Node topNode = dictory.root.get(firstLetter);
+        if (topNode == null) {
+            //说明还没有这个首字母开头的数据
+            Node firstNode = new Node(firstLetter);
+            dictory.root.put(firstLetter, firstNode);
+            topNode = firstNode;
+            if (length == 1) {
+                topNode.isWord = true;
+                topNode.length = length;
+            }
+        } else {
+            if (length == 1) {
+                topNode.frequencyIncr();
+                topNode.isWord = true;
+                topNode.length = length;
+            }
+        }
+        for (int i = 1; i < length; i++) {
+            Node haveSameValueNode = topNode.getPossibleLetterNode(chars[i]);
+            if (haveSameValueNode == null) {
+                topNode = topNode.insert(chars[i]);
+            } else {
+                //说明已经存在,直接跳过
+                topNode = haveSameValueNode;
+                if (i == length - 1 && topNode.isWord) {
+                    //存在相同的
+                    topNode.frequencyIncr();
+                    return true;
+                }
+            }
+            if (i == length - 1) {
+                topNode.isWord = true;
+                topNode.length = length;
+            }
+        }
+        return false;
     }
 
     /**
@@ -136,6 +187,8 @@ class Trie {
 
         int length;
 
+        int frequency;
+
         Character value;
 
         HashMap<Character, Node> nextMap;
@@ -144,6 +197,7 @@ class Trie {
 
         Node(Character value) {
             this.value = value;
+            this.frequency = 1;
         }
 
         Node getPossibleLetterNode(Character value) {
@@ -160,6 +214,10 @@ class Trie {
             Node node = new Node(value);
             nextMap.put(value, node);
             return node;
+        }
+
+        void frequencyIncr() {
+            this.frequency++;
         }
 
     }
