@@ -47,6 +47,7 @@ public class SensitiveServiceImpl implements SensitiveService {
         boolean hasSensitiveWord = false;
         if (!CollectionUtils.isEmpty(wordSet)) {
             try {
+                int i = 1/0;
                 RBloomFilter<Object> filter = redissonClient.getBloomFilter("sensitive-word-bloom-filter-test");
                 for (String word : wordSet) {
                     System.out.println("word=" + word);
@@ -64,15 +65,7 @@ public class SensitiveServiceImpl implements SensitiveService {
                 }
             }
         }
-        return hasSensitiveWord ? "fail" : "success";
-    }
-
-    private String getWordString(Set<String> wordSet) {
-        StringBuilder stringBuffer = new StringBuilder();
-        for (String word : wordSet) {
-            stringBuffer.append("'").append(word).append("'").append(",");
-        }
-        return stringBuffer.toString().substring(0, stringBuffer.toString().length() - 1);
+        return hasSensitiveWord ? "success" : "fail";
     }
 
     private Set<String> getWordSet(String comment) {

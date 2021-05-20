@@ -26,7 +26,7 @@ public class TrieTree {
     /**
      * Initialize your data structure here.
      */
-    public TrieTree() {
+    private TrieTree() {
         dictory = new Dictory();
     }
 
