@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
 
 public class ObjectMain1 {
 
@@ -13,13 +12,15 @@ public class ObjectMain1 {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         TrieTree dic = TrieTree.getInstance;
         String line;
-        while ((line = reader.readLine()) != null){
-            dic.insert(line);
+        while ((line = reader.readLine()) != null) {
+            if (line != null && line.length() >= 1) {
+                dic.insert(line);
+            }
         }
 
         System.out.println("dd");
 
-        while (true){
+        while (true) {
             Thread.sleep(10000);
         }
     }
