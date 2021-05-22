@@ -8,7 +8,7 @@ import java.io.IOException;
 public class ObjectMain1 {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        File file = new File("D:\\1.sql");
+        File file = new File("D:\\2.sql");
         BufferedReader reader = new BufferedReader(new FileReader(file));
         TrieTree dic = TrieTree.getInstance;
         String line;
@@ -18,7 +18,7 @@ public class ObjectMain1 {
             }
         }
 
-        System.out.println("dd");
+        System.out.println("11");
 
         while (true) {
             Thread.sleep(10000);

@@ -20,6 +20,7 @@
         <option value="$PROJECT_DIR$/demo-redisson/pom.xml" />
         <option value="$PROJECT_DIR$/demo-springcloud/pom.xml" />
         <option value="$PROJECT_DIR$/demo-algorithm/pom.xml" />
+        <option value="$PROJECT_DIR$/reference/java_design_patterns/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

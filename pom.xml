@@ -9,5 +9,6 @@
     <version>1.0.0</version>
     <modules>
         <module>demo-sensitive-word-filter-by-trie</module>
+        <module>demo-design-patterns</module>
     </modules>
 </project>
