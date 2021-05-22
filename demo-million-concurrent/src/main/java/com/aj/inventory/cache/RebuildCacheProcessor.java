@@ -10,7 +10,6 @@ import com.aj.inventory.model.News;
 import com.aj.inventory.service.NewsCacheService;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
-
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -22,7 +21,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class RebuildCacheProcessor implements Runnable {
 
     private static final ArrayBlockingQueue<News> QUEUE = new ArrayBlockingQueue<>(1000);
+
     private final NewsCacheService newsCacheService;
+
     private final CuratorFramework curatorClient;
 
     public RebuildCacheProcessor() {

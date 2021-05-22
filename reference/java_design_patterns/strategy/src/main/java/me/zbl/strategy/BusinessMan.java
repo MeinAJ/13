@@ -34,8 +34,8 @@ public class BusinessMan {
     this.strategy = strategy;
   }
 
-  public void changetStrategy(TransportationStrategy strategy) {
-    this.strategy = strategy;
+  public TransportationStrategy changetStrategy(TransportationStrategy strategy) {
+    return this.strategy = strategy;
   }
 
   public void transport() {
