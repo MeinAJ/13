@@ -28,17 +28,18 @@ package me.zbl.strategy;
  */
 public class BusinessMan {
 
-  private TransportationStrategy strategy;
+    private TransportationStrategy strategy;
 
-  public BusinessMan(TransportationStrategy strategy) {
-    this.strategy = strategy;
-  }
+    public BusinessMan(TransportationStrategy strategy) {
+        this.strategy = strategy;
+    }
 
-  public TransportationStrategy changetStrategy(TransportationStrategy strategy) {
-    return this.strategy = strategy;
-  }
+    public void changetStrategy(TransportationStrategy strategy) {
+        this.strategy = strategy;
+    }
 
-  public void transport() {
-    this.strategy.go();
-  }
+    public void transport() {
+        this.strategy.go();
+    }
+
 }

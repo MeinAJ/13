@@ -6,12 +6,14 @@
 package com.aj.idempotence.controller;
 
 import com.aj.idempotence.annotations.CheckIdempotence;
+import com.aj.idempotence.service.OrderService;
 import com.aj.idempotence.utils.SnowFlakeUtil;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
@@ -29,10 +31,12 @@ public class TestController {
     @Autowired
     private RedissonClient redissonClient;
 
+    @Autowired
+    private OrderService orderService;
+
     @GetMapping(value = "/check")
-    @CheckIdempotence
-    public String test(@RequestHeader(value = "token") String token) {
-        System.out.println("有效token=" + token);
+    public String test(@RequestParam(value = "token") String token) {
+        orderService.createOrder(token);
         return "success";
     }
 

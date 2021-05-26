@@ -22,6 +22,8 @@
         <option value="$PROJECT_DIR$/demo-algorithm/pom.xml" />
         <option value="$PROJECT_DIR$/reference/java_design_patterns/pom.xml" />
         <option value="$PROJECT_DIR$/reference/little-project-rocketmq/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-shardingjdbc-news/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-transactional/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
