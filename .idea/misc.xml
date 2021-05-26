@@ -24,6 +24,7 @@
         <option value="$PROJECT_DIR$/reference/little-project-rocketmq/pom.xml" />
         <option value="$PROJECT_DIR$/demo-shardingjdbc-news/pom.xml" />
         <option value="$PROJECT_DIR$/demo-transactional/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-unique-jar/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

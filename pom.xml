@@ -10,5 +10,6 @@
     <modules>
         <module>demo-sensitive-word-filter-by-trie</module>
         <module>demo-design-patterns</module>
+        <module>demo-unique-jar</module>
     </modules>
 </project>
