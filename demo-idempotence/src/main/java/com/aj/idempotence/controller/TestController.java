@@ -5,13 +5,11 @@
 
 package com.aj.idempotence.controller;
 
-import com.aj.idempotence.annotations.CheckIdempotence;
 import com.aj.idempotence.service.OrderService;
 import com.aj.idempotence.utils.SnowFlakeUtil;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +42,7 @@ public class TestController {
     public String getToken() {
         String id = SnowFlakeUtil.getId();
         System.out.println("生成的雪花id=" + id);
-        redissonClient.getBucket(id).set(System.currentTimeMillis(), 1111, TimeUnit.SECONDS);
+        redissonClient.getBucket(id).set(System.currentTimeMillis(), 20, TimeUnit.SECONDS);
         System.out.println("雪花id放入redis中,time=" + LocalDateTime.now());
         return id;
     }
