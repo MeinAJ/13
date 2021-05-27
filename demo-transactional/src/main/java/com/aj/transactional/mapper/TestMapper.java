@@ -5,7 +5,9 @@
 
 package com.aj.transactional.mapper;
 
+import com.aj.transactional.domain.News;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 /**
@@ -21,5 +23,8 @@ public interface TestMapper {
 
     @Update(value = "update t_news set title = #{title}")
     void updateNews(@Param(value = "title") String title);
+
+    @Select(value = "select * from t_news where id = #{id}")
+    News getNews(@Param(value = "id") Long id);
 
 }

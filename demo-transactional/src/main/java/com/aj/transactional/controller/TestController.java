@@ -7,7 +7,7 @@ package com.aj.transactional.controller;
 
 import com.aj.transactional.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2021-04-21
  */
 @RestController
-@RequestMapping(value = "/api/v1/test")
+@RequestMapping
 public class TestController {
 
     @Autowired
     private TestService testService;
 
-    @PostMapping(value = "/api/v1/test")
+    @GetMapping(value = "/test")
     public String test() {
         testService.test();
         return "success";
