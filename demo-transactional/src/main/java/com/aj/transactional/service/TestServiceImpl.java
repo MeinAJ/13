@@ -34,6 +34,12 @@ public class TestServiceImpl implements TestService {
         testMapper.updateNews((l + 1) + "");
         System.out.println("修改新闻=" + (l + 1));
         testServiceV2.test();
+
+        //update t_order set status = 1 where id = 1 and status = 2;
+
+        //update t_goods set used = 1,version = 2 where id = 1 and version  = 1
+
+        //同一时间两个人，如果在同一时间
     }
 
 }
