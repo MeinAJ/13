@@ -26,6 +26,7 @@
         <option value="$PROJECT_DIR$/demo-transactional/pom.xml" />
         <option value="$PROJECT_DIR$/demo-unique-jar/pom.xml" />
         <option value="$PROJECT_DIR$/demo-canal-rocketmq/pom.xml" />
+        <option value="$PROJECT_DIR$/rocketmq/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
