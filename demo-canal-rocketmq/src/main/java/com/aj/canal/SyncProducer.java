@@ -9,14 +9,14 @@ public class SyncProducer {
     public static void main(String[] args) throws Exception {
         //Instantiate with a producer group name.
         DefaultMQProducer producer = new
-                DefaultMQProducer("test-002");
+                DefaultMQProducer("test-003");
         // Specify name server addresses.
-        producer.setNamesrvAddr("192.168.0.203:9876");
+        producer.setNamesrvAddr("192.168.0.203:9876;192.168.0.204:9876;192.168.0.205:9876");
         //Launch the instance.
         producer.start();
         for (int i = 0; i < 100; i++) {
             //Create a message instance, specifying topic, tag and message body.
-            Message msg = new Message("test-002" /* Topic */,
+            Message msg = new Message("test-003" /* Topic */,
                     "TagA" /* Tag */,
                     ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
             );
