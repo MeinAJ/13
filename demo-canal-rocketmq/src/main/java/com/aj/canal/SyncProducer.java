@@ -14,6 +14,7 @@ public class SyncProducer {
         producer.setNamesrvAddr("192.168.0.203:9876;192.168.0.204:9876;192.168.0.205:9876");
         //Launch the instance.
         producer.start();
+//        producer.setSendMsgTimeout(30000);
         for (int i = 0; i < 100; i++) {
             //Create a message instance, specifying topic, tag and message body.
             Message msg = new Message("test-003" /* Topic */,
@@ -24,7 +25,8 @@ public class SyncProducer {
             SendResult sendResult = producer.send(msg);
             System.out.printf("%s%n", sendResult);
         }
+
         //Shut down once the producer instance is not longer in use.
-        producer.shutdown();
+//        producer.shutdown();
     }
 }
