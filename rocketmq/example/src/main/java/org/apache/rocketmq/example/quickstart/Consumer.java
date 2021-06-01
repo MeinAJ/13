@@ -73,6 +73,7 @@ public class Consumer {
             }
         });
 
+
         /*
          *  Launch the consumer instance.
          */
