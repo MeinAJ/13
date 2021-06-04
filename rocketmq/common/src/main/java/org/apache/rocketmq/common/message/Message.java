@@ -25,9 +25,13 @@ import java.util.Map;
 public class Message implements Serializable {
     private static final long serialVersionUID = 8445773977080406428L;
 
+    //主题
     private String topic;
+    //消息flag(不做处理)
     private int flag;
+    //扩展属性(存放tags,存放消息的索引值,多个索引值用空格拼接成一个字符串 "key1 key2")
     private Map<String, String> properties;
+    //消息
     private byte[] body;
     private String transactionId;
 
