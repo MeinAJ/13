@@ -5,12 +5,10 @@
 
 package com.aj.nio;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 
 /**
  * NioMain
@@ -26,14 +24,12 @@ public class NioMain {
 //        byte[] bytes = new byte[]{1, 2, 3, 4};
 //        final ByteBuffer buffer = ByteBuffer.wrap(bytes);
 
-        FileOutputStream in = new FileOutputStream("D:\\tmp\\hello.txt");
-        FileChannel channel = in.getChannel();
-        FileLock lock = channel.lock(0, Long.MAX_VALUE, false);
+        FileOutputStream out = new FileOutputStream("D:\\tmp\\hello.txt");
+        FileChannel channel = out.getChannel();
 
         ByteBuffer buffer = ByteBuffer.wrap("hello world 001".getBytes());
         channel.write(buffer);
-
-        lock.release();
+        channel.force(true);
 
 //        for (int i = 0; i < 10; i++) {
 //            new Thread(){
