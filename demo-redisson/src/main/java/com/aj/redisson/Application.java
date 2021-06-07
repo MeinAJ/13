@@ -29,7 +29,6 @@ public class Application {
         Long aLong = rate.get();
         System.out.println(aLong);
 
-        final AtomicInteger flag = new AtomicInteger(0);
         for (int i = 0; i < 65; i++) {
             new Thread() {
                 @Override
@@ -50,7 +49,6 @@ public class Application {
                         System.out.println("没有获取到值");
                     } else {
                         System.out.println("当前值=" + value);
-                        System.out.println("flag=" + flag.incrementAndGet());
                     }
                 }
             }.start();
