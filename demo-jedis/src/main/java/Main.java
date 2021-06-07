@@ -8,9 +8,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        JedisShardInfo shardInfo = new JedisShardInfo("192.168.2.52", "6379");
+        JedisShardInfo shardInfo = new JedisShardInfo("192.168.0.103", "7001");
 //        shardInfo.setPassword("redis-pass");
         Jedis jedis = new Jedis(shardInfo);
+        Long test = jedis.incrBy("test", 1);
+        System.out.println(test);
 //        jedis.setnx("k1", "v1");
 //        System.out.println(jedis.get("k1"));
 //

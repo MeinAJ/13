@@ -1,29 +1,64 @@
 package com.aj.redisson;
 
 import org.redisson.Redisson;
-import org.redisson.api.RBloomFilter;
+import org.redisson.api.RAtomicLong;
+import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("ALL")
 public class Application {
 
     public static void main(String[] args) throws InterruptedException {
-//        Config config = new Config();
-//        config.useClusterServers()
-//                .addNodeAddress("redis://192.168.0.103:7001")
-//                .addNodeAddress("redis://192.168.0.103:7002")
-//                .addNodeAddress("redis://192.168.0.104:7003")
-//                .addNodeAddress("redis://192.168.0.104:7004")
-//                .addNodeAddress("redis://192.168.0.105:7005")
-//                .addNodeAddress("redis://192.168.0.105:7006")
-//                .setPassword("redis-pass");
-//        RedissonClient redisson = Redisson.create(config);
-
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://192.168.0.103:7002").setPassword("redis-pass");
+        config.useClusterServers()
+                .addNodeAddress("redis://192.168.0.103:7001")
+                .addNodeAddress("redis://192.168.0.103:7002")
+                .addNodeAddress("redis://192.168.0.104:7003")
+                .addNodeAddress("redis://192.168.0.104:7004")
+                .addNodeAddress("redis://192.168.0.105:7005")
+                .addNodeAddress("redis://192.168.0.105:7006")
+                .setPassword("redis-pass");
         final RedissonClient redisson = Redisson.create(config);
+        RBucket<Long> rate = redisson.getBucket("dd");
+        rate.set(1L, 60, TimeUnit.SECONDS);
+        Long aLong = rate.get();
+        System.out.println(aLong);
+
+        final AtomicInteger flag = new AtomicInteger(0);
+        for (int i = 0; i < 65; i++) {
+            new Thread() {
+                @Override
+                public void run() {
+                    String key = "filter:rate";
+                    RAtomicLong filter = redisson.getAtomicLong(key);
+                    filter.expire(1, TimeUnit.SECONDS);
+                    Long value = filter.incrementAndGet();
+                    if (value == null || value > 60) {
+                        //判定到已经失效
+                        RLock fairLock = redisson.getFairLock("filter:lock:" + key);
+                        if (fairLock.tryLock()) {
+                            filter.set(0);
+                            filter.expire(1, TimeUnit.SECONDS);
+                            value = filter.incrementAndGet();
+                            System.out.println("重新获取值=" + value);
+                        }
+                        System.out.println("没有获取到值");
+                    } else {
+                        System.out.println("当前值=" + value);
+                        System.out.println("flag=" + flag.incrementAndGet());
+                    }
+                }
+            }.start();
+        }
+
+//        Config config = new Config();
+//        config.useSingleServer().setAddress("redis://192.168.0.103:7002").setPassword("redis-pass");
+//        final RedissonClient redisson = Redisson.create(config);
 
 //        RLock lock = redisson.getLock("anyLock");
 //        lock.lock();
@@ -89,19 +124,21 @@ public class Application {
 //        writeLock.unlock();
 //
 //        System.out.println("over");
-        String s = "bloomfilter-";
-        RBloomFilter<Object> test = redisson.getBloomFilter(s);
-        test.tryInit(100000000L,0.03);
-        boolean add0 = test.add("1");
-        boolean add1 = test.add("2");
-        boolean add2 = test.add("3");
-        boolean add3 = test.add("4");
-        boolean add4 = test.add("5");
+//        String s = "bloomfilter-";
+//        RBloomFilter<Object> test = redisson.getBloomFilter(s);
+//        test.tryInit(100000000L,0.03);
+//        boolean add0 = test.add("1");
+//        boolean add1 = test.add("2");
+//        boolean add2 = test.add("3");
+//        boolean add3 = test.add("4");
+//        boolean add4 = test.add("5");
+//
+//        boolean contains = test.contains("1");
+//        System.out.println(contains);
+//        contains = test.contains("6");
+//        System.out.println(contains);
 
-        boolean contains = test.contains("1");
-        System.out.println(contains);
-        contains = test.contains("6");
-        System.out.println(contains);
+
     }
 
 }
