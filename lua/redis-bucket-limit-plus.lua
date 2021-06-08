@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------------
 local redis = require 'redis'
-local host = "192.168.2.52"
+local host = "127.0.0.1"
 local port = 6379
 client = redis.connect(host, port)
 redis.call = function(cmd, ...)
