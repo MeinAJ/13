@@ -28,7 +28,7 @@ public class LimitController {
 
     /**
      * @return
-     * @{CounterLimit} 令牌桶限流 最大容量100,初始容量100,每10秒添加1个,每60秒重置令牌
+     * @{CounterLimit} 令牌桶限流 最大容量100,初始容量100,每10秒添加1个,每60秒重置令牌,这样1分钟最多消费106个,最少消费0个
      */
     @BucketLimit(key = "jack-bucket", maxCapacity = 100, initTokens = 100, intervalTime = 10000, resetBucketInterval = 60000)
     @GetMapping("/bucketLimit")
