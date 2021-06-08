@@ -8,7 +8,6 @@ redis.call = function(cmd, ...)
 end
 
 ----------------------------------------------------------------------------------------
-
 function tableLen(table)
     local leng = 0
     for k, v in pairs(table) do
@@ -19,22 +18,26 @@ end
 
 local key = "redis:bucket:limit:plus"
 local tokensRemaining = "tokensRemaining"
+local count = "200"
+local pexpire = "1000"
+local zero = 0
+
 local bucket = redis.call("hgetall", key)
 local remainTokens
 print("元数据长度" .. tableLen(bucket))
 
 if tableLen(bucket) == 0 then
-    redis.call("hset", key, tokensRemaining, 10)
-    redis.call("expire", key, 15)
-    remainTokens = 20
+    redis.call("hset", key, tokensRemaining, tonumber(count))
+    redis.call("pexpire", key, tonumber(pexpire))
+    remainTokens = tonumber(count)
 else
     remainTokens = tonumber(bucket[tokensRemaining])
 end
 
-if remainTokens == 0 then
+if remainTokens == zero then
     redis.call("hset", key, tokensRemaining, remainTokens)
     print("剩余tokens=" .. remainTokens)
-    return 0
+    return zero
 else
     remainTokens = remainTokens - 1;
     redis.call("hset", key, tokensRemaining, remainTokens)
