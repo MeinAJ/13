@@ -1,60 +1,56 @@
 package com.aj.redisson;
 
 import org.redisson.Redisson;
-import org.redisson.api.RAtomicLong;
-import org.redisson.api.RBucket;
-import org.redisson.api.RLock;
+import org.redisson.api.RScript;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("ALL")
 public class Application {
 
     public static void main(String[] args) throws InterruptedException {
-        Config config = new Config();
-        config.useClusterServers()
-                .addNodeAddress("redis://192.168.0.103:7001")
-                .addNodeAddress("redis://192.168.0.103:7002")
-                .addNodeAddress("redis://192.168.0.104:7003")
-                .addNodeAddress("redis://192.168.0.104:7004")
-                .addNodeAddress("redis://192.168.0.105:7005")
-                .addNodeAddress("redis://192.168.0.105:7006")
-                .setPassword("redis-pass");
-        final RedissonClient redisson = Redisson.create(config);
-        RBucket<Long> rate = redisson.getBucket("dd");
-        rate.set(1L, 60, TimeUnit.SECONDS);
-        Long aLong = rate.get();
-        System.out.println(aLong);
-
-        for (int i = 0; i < 65; i++) {
-            new Thread() {
-                @Override
-                public void run() {
-                    String key = "filter:rate";
-                    RAtomicLong filter = redisson.getAtomicLong(key);
-                    filter.expire(1, TimeUnit.SECONDS);
-                    Long value = filter.incrementAndGet();
-                    if (value == null || value > 60) {
-                        //判定到已经失效
-                        RLock fairLock = redisson.getFairLock("filter:lock:" + key);
-                        if (fairLock.tryLock()) {
-                            filter.set(0);
-                            filter.expire(1, TimeUnit.SECONDS);
-                            value = filter.incrementAndGet();
-                            System.out.println("重新获取值=" + value);
-                        }
-                        System.out.println("没有获取到值");
-                    } else {
-                        System.out.println("当前值=" + value);
-                    }
-                }
-            }.start();
-        }
-
 //        Config config = new Config();
-//        config.useSingleServer().setAddress("redis://192.168.0.103:7002").setPassword("redis-pass");
+//        config.useClusterServers()
+//                .addNodeAddress("redis://192.168.0.103:7001")
+//                .addNodeAddress("redis://192.168.0.103:7002")
+//                .addNodeAddress("redis://192.168.0.104:7003")
+//                .addNodeAddress("redis://192.168.0.104:7004")
+//                .addNodeAddress("redis://192.168.0.105:7005")
+//                .addNodeAddress("redis://192.168.0.105:7006")
+//                .setPassword("redis-pass");
 //        final RedissonClient redisson = Redisson.create(config);
+//        RBucket<Long> rate = redisson.getBucket("dd");
+//        rate.set(1L, 60, TimeUnit.SECONDS);
+//        Long aLong = rate.get();
+//        System.out.println(aLong);
+//
+//        for (int i = 0; i < 65; i++) {
+//            new Thread() {
+//                @Override
+//                public void run() {
+//                    String key = "filter:rate";
+//                    RAtomicLong filter = redisson.getAtomicLong(key);
+//                    filter.expire(1, TimeUnit.SECONDS);
+//                    Long value = filter.incrementAndGet();
+//                    if (value == null || value > 60) {
+//                        //判定到已经失效
+//                        RLock fairLock = redisson.getFairLock("filter:lock:" + key);
+//                        if (fairLock.tryLock()) {
+//                            filter.set(0);
+//                            filter.expire(1, TimeUnit.SECONDS);
+//                            value = filter.incrementAndGet();
+//                            System.out.println("重新获取值=" + value);
+//                        }
+//                        System.out.println("没有获取到值");
+//                    } else {
+//                        System.out.println("当前值=" + value);
+//                    }
+//                }
+//            }.start();
+//        }
+
 
 //        RLock lock = redisson.getLock("anyLock");
 //        lock.lock();
@@ -135,6 +131,25 @@ public class Application {
 //        System.out.println(contains);
 
 
+    }
+
+
+    /**
+     *基于lua脚本实现计数限流
+     */ {
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://192.168.2.52:6379");
+        final RedissonClient redisson = Redisson.create(config);
+        List<Object> keys = new ArrayList<Object>();
+        keys.add("123");
+        Long count = redisson.getScript().evalSha(
+                RScript.Mode.READ_WRITE,
+                "6730ca2a89e6e2aee882ca44b0868874877a6690",
+                RScript.ReturnType.INTEGER,
+                keys,
+                60,
+                60);
+        System.out.println(count);
     }
 
 }
