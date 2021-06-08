@@ -112,7 +112,7 @@ if currentTokens == 0 then
     redis.call('hset', key, 'tokensRemaining', currentTokens)
     return 0
 else
-    -- 如果当前令牌 大于 0, 更新当前桶内的令牌 -1 , 再返回当前桶内令牌数
+    -- 如果当前令牌 大于 0, 更新当前桶内的(令牌 -1) , 再返回当前桶内令牌数
     redis.call('hset', key, 'tokensRemaining', currentTokens - 1)
     return currentTokens
 end
