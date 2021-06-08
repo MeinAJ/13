@@ -29,8 +29,16 @@ local resetBucketInterval = tonumber(ARGV[5])
 local bucket = redis.call('hgetall', key)
 local currentTokens
 
+function table_leng(t)
+    local leng=0
+    for k, v in pairs(t) do
+        leng=leng+1
+    end
+    return leng;
+end
+
 -- 若当前桶未初始化,先初始化令牌桶
-if table.maxn(bucket) == 0 then
+if table_leng(bucket) == 0 then
     -- 初始桶内令牌
     currentTokens = initTokens
     -- 设置桶最近的填充时间是当前
@@ -41,7 +49,7 @@ if table.maxn(bucket) == 0 then
     -- 若桶已初始化,开始计算桶内令牌
     -- 为什么等于 4 ? 因为有两对 field, 加起来长度是 4
     -- { "lastRefillTime(上一次更新时间)","curTime(更新时间值)","tokensRemaining(当前保留的令牌)","令牌数" }
-elseif table.maxn(bucket) == 4 then
+elseif table_leng(bucket) == 4 then
 
     -- 上次填充时间
     local lastRefillTime = tonumber(bucket[2])

@@ -23,6 +23,7 @@ local num = table_leng(bucket)
 print(num)
 
 redis.call('hset','redis:bucket:limit','lastRefillTime',123)
+redis.call('hset','redis:bucket:limit','lastRefillTime1',123)
 
 bucket = redis.call('hgetall', 'redis:bucket:limit')
 local num1 = table_leng(bucket)
