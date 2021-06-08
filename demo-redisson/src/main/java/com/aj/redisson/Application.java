@@ -134,22 +134,38 @@ public class Application {
     }
 
 
-    /**
-     *基于lua脚本实现计数限流
-     */ {
+    {
+        //基于lua脚本实现计数限流,1000ms,限流60个请求
         Config config = new Config();
         config.useSingleServer().setAddress("redis://192.168.2.52:6379");
         final RedissonClient redisson = Redisson.create(config);
         List<Object> keys = new ArrayList<Object>();
-        keys.add("123");
+        keys.add("rate:key");
         Long count = redisson.getScript().evalSha(
                 RScript.Mode.READ_WRITE,
                 "6730ca2a89e6e2aee882ca44b0868874877a6690",
                 RScript.ReturnType.INTEGER,
                 keys,
                 60,
-                60);
+                1000);
         System.out.println(count);
+        /**
+         * lua脚本如下:
+         * ------------------------------------------------------------------------------------------
+         * local count = tonumber(redis.call("incr", KEYS[1]))
+         * if (count == 1) then
+         *     redis.call("pexpire", KEYS[1], tonumber(ARGV[2]))
+         * elseif (count > tonumber(ARGV[1])) then
+         *     return -1
+         * end
+         * return cnt
+         * ------------------------------------------------------------------------------------------
+         *
+         * 将lua脚本缓存:
+         * ------------------------------------------------------------------------------------------
+         * SCRIPT LOAD <lua脚本,如上>
+         * ------------------------------------------------------------------------------------------
+         */
     }
 
 }

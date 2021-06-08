@@ -11,5 +11,4 @@ if (cnt == 1) then
 elseif (cnt > tonumber(ARGV[1])) then
     return -1
 end
-
 return cnt
