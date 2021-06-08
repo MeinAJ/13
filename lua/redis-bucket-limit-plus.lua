@@ -1,34 +1,42 @@
+local redis = require 'redis'
+local host = "192.168.2.52"
+local port = 6379
+client = redis.connect(host, port)
+
+redis.call = function(cmd, ...)
+    return assert(loadstring('return client:' .. string.lower(cmd) .. '(...)'))(...)
+end
+
 function table_leng(t)
-    local leng=0
+    local leng = 0
     for k, v in pairs(t) do
-        leng=leng+1
+        leng = leng + 1
     end
     return leng;
 end
 
-local key = "redis:bucket:limit:plus"-- key
-local maxTokens = tonumber("2000") -- 最高200并发
-local resetBucketInterval = tonumber("10000")-- 1000ms重置令牌时间
+local key = "redis:bucket:limit:plus"
+local tokensRemaining = "tokensRemaining"
+local bucket = redis.call("hgetall", key)
+local remainTokens
+print("元数据长度"..table_leng(bucket))
 
-local bucket = redis.call('hgetall', key)
-local currentTokens
-
--- 若当前桶未初始化,先初始化令牌桶
-if table_leng(bucket) == 0
-then
-    -- 初始桶内令牌
-    currentTokens = maxTokens
-    -- 初始化令牌桶的过期时间
-    redis.call('pexpire', key, resetBucketInterval)
+if table_leng(bucket) == 0 then
+    redis.call("hset", key, tokensRemaining, 10)
+    redis.call("expire", key, 15)
+    remainTokens = 20
+else
+remainTokens = tonumber(bucket[tokensRemaining])
 end
 
--- 如果当前令牌 == 0 ,更新桶内令牌, 返回 0
-if currentTokens == 0
+if remainTokens == 0
 then
-    redis.call('hset', key, 'tokensRemaining', currentTokens)
+    redis.call("hset", key, tokensRemaining, remainTokens)
+    print("剩余tokens="..remainTokens)
     return 0
 else
-    -- 如果当前令牌 大于 0, 更新当前桶内的(令牌 -1) , 再返回当前桶内令牌数
-    redis.call('hset', key, 'tokensRemaining', currentTokens - 1)
-    return currentTokens
+redis.call("hset", key, tokensRemaining, remainTokens - 1)
+remainTokens = remainTokens - 1;
 end
+
+print("剩余tokens="..remainTokens)

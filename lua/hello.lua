@@ -19,19 +19,24 @@ local key = "redis:bucket:limit:plus"
 local tokensRemaining = "tokensRemaining"
 local bucket = redis.call("hgetall", key)
 local remainTokens
+print("元数据长度"..table_leng(bucket))
 
 if table_leng(bucket) == 0 then
-    redis.call("hset", key, tokensRemaining, 2000)
-    redis.call("pexpire", key, 10000)
-    remainTokens = 2000
+    redis.call("hset", key, tokensRemaining, 10)
+    redis.call("expire", key, 15)
+    remainTokens = 20
 else
-remainTokens = tonumber(bucket[1])
+remainTokens = tonumber(bucket[tokensRemaining])
 end
 
 if remainTokens == 0
 then
     redis.call("hset", key, tokensRemaining, remainTokens)
+    print("剩余tokens="..remainTokens)
     return 0
 else
 redis.call("hset", key, tokensRemaining, remainTokens - 1)
+remainTokens = remainTokens - 1;
 end
+
+print("剩余tokens="..remainTokens)
