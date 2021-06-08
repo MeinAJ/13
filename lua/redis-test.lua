@@ -7,6 +7,9 @@ redis.call = function(cmd, ...)
     return assert(loadstring('return client:'.. string.lower(cmd) ..'(...)'))(...)
 end
 
+-- 备注
+
 redis.call("set","key001","123")
 local value = redis.call("get","key001")
 print(value)
+
