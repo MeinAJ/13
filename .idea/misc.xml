@@ -28,6 +28,7 @@
         <option value="$PROJECT_DIR$/demo-canal-rocketmq/pom.xml" />
         <option value="$PROJECT_DIR$/rocketmq/pom.xml" />
         <option value="$PROJECT_DIR$/demo-nio/pom.xml" />
+        <option value="$PROJECT_DIR$/reference/redis-lua-limit/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
