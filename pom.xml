@@ -11,5 +11,6 @@
         <module>demo-design-patterns</module>
         <module>demo-unique-jar</module>
         <module>demo-nio</module>
+        <module>demo-rate-limiter</module>
     </modules>
 </project>
