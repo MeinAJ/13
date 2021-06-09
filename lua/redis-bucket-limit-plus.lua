@@ -24,7 +24,6 @@ local zero = 0
 
 local bucket = redis.call("hgetall", key)
 local remainTokens
-print("元数据长度" .. tableLen(bucket))
 
 if tableLen(bucket) == 0 then
     redis.call("hset", key, tokensRemaining, tonumber(count))
