@@ -36,11 +36,9 @@ end
 
 if remainTokens == zero then
     redis.call("hset", key, tokensRemaining, remainTokens)
-    print("剩余tokens=" .. remainTokens)
     return zero
 else
     remainTokens = remainTokens - 1;
     redis.call("hset", key, tokensRemaining, remainTokens)
-    print("剩余tokens=" .. remainTokens)
     return remainTokens
 end
