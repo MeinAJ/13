@@ -145,10 +145,14 @@ public class Application {
                 RScript.Mode.READ_WRITE,
                 "6730ca2a89e6e2aee882ca44b0868874877a6690"/*lua脚本的sha值*/,
                 RScript.ReturnType.INTEGER,
-                keys,
-                60,
-                1000);
-        System.out.println(count);
+                keys /* KEYS */,
+                200 /* ARGV[1]*/,
+                1000/* ARGV[2]*/);
+        if (count == null || count >= 200) {
+            System.out.println("无法获取有效的令牌");
+        } else {
+            System.out.println("获取到有效的令牌");
+        }
         /**
          * lua脚本如下:
          * ------------------------------------------------------------------------------------------

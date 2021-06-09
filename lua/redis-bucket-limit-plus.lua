@@ -16,10 +16,10 @@ function tableLen(table)
     return leng;
 end
 
-local key = "redis:bucket:limit:plus"
+local key = "redis:bucket:limit:plus" -- KEYS[1]
 local tokensRemaining = "tokensRemaining"
-local count = "200"
-local pexpire = "1000"
+local count = "200" -- 限流数 200个令牌 ARGV[1]
+local pexpire = "1000" -- 单位时间 1000ms ARGV[2]
 local zero = 0
 
 local bucket = redis.call("hgetall", key)
