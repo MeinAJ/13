@@ -143,7 +143,7 @@ public class Application {
         keys.add("rate:key");
         Long count = redisson.getScript().evalSha(
                 RScript.Mode.READ_WRITE,
-                "6730ca2a89e6e2aee882ca44b0868874877a6690",
+                "6730ca2a89e6e2aee882ca44b0868874877a6690"/*lua脚本的sha值*/,
                 RScript.ReturnType.INTEGER,
                 keys,
                 60,
