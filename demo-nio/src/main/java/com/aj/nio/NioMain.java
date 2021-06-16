@@ -5,10 +5,13 @@
 
 package com.aj.nio;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 
 /**
  * NioMain
@@ -20,6 +23,15 @@ import java.nio.channels.FileChannel;
 public class NioMain {
 
     public static void main(String[] args) throws IOException {
+
+        Selector selector = Selector.open();
+
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.register(selector, SelectionKey.OP_WRITE);
+
+        SocketChannel channel = null;
+        selector.select();
+
 //        byte[] bytes = "hello world".getBytes();
 //        byte[] bytes = new byte[]{1, 2, 3, 4};
 //        final ByteBuffer buffer = ByteBuffer.wrap(bytes);
