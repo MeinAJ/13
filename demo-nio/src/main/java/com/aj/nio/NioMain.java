@@ -24,12 +24,12 @@ public class NioMain {
 //        byte[] bytes = new byte[]{1, 2, 3, 4};
 //        final ByteBuffer buffer = ByteBuffer.wrap(bytes);
 
-        FileOutputStream out = new FileOutputStream("D:\\tmp\\hello.txt");
-        FileChannel channel = out.getChannel();
-
-        ByteBuffer buffer = ByteBuffer.wrap("hello world 001".getBytes());
-        channel.write(buffer);
-        channel.force(true);
+//        FileOutputStream out = new FileOutputStream("D:\\tmp\\hello.txt");
+//        FileChannel channel = out.getChannel();
+//
+//        ByteBuffer buffer = ByteBuffer.wrap("hello world 001".getBytes());
+//        channel.write(buffer);
+//        channel.force(true);
 
 //        for (int i = 0; i < 10; i++) {
 //            new Thread(){
