@@ -6,9 +6,11 @@
     <artifactId>demo-bytecc-service</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-
     <properties>
+        <skipTests>true</skipTests>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <!-- 继承spring boot的parent工程 -->

@@ -12,5 +12,8 @@
         <module>demo-unique-jar</module>
         <module>demo-nio</module>
         <module>demo-rate-limiter</module>
+        <module>little-project-spring</module>
+        <module>test001</module>
+        <module>demo-netty</module>
     </modules>
 </project>
