@@ -51,7 +51,7 @@ public class RiderWorker {
     }
 
     private void init() {
-        scheduler.scheduleWithFixedDelay(new Task(), 1000, 10000, TimeUnit.MILLISECONDS);
+        scheduler.scheduleWithFixedDelay(new Task(), 10000/*首次延时10s*/, 30000 /*30s执行一次*/, TimeUnit.MILLISECONDS);
     }
 
     public void put(String province, LatLng latLng) throws Exception {
