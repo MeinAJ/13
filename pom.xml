@@ -15,5 +15,6 @@
         <module>little-project-spring</module>
         <module>test001</module>
         <module>demo-netty</module>
+        <module>demo-take-out-rider</module>
     </modules>
 </project>

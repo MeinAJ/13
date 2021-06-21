@@ -31,6 +31,7 @@
         <option value="$PROJECT_DIR$/reference/redis-lua-limit/pom.xml" />
         <option value="$PROJECT_DIR$/little-project-spring/pom.xml" />
         <option value="$PROJECT_DIR$/demo-netty/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-take-out-rider/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
