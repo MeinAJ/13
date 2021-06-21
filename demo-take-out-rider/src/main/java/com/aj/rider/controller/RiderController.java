@@ -21,8 +21,9 @@ public class RiderController {
     @RequestMapping("/rider")
     public void upload(@RequestParam(value = "lat") double lat,
                        @RequestParam(value = "lng") double lng,
-                       @RequestParam(value = "province") String province) {
-        riderService.upload(lat, lng, province);
+                       @RequestParam(value = "province") String province,
+                       @RequestParam(value = "name") String name) throws Exception {
+        riderService.upload(lat, lng, province, name);
     }
 
 }

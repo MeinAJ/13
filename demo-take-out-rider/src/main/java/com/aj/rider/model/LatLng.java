@@ -20,4 +20,14 @@ public class LatLng {
 
     private Double lng;
 
+    private String name;
+
+    private boolean isValid;
+
+    public LatLng(Double lat, Double lng, String name) {
+        this.lat = lat;
+        this.lng = lng;
+        this.name = name;
+        this.isValid = lat != null && lng != null && name != null;
+    }
 }

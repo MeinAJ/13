@@ -9,16 +9,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * DistributedIdApplication
+ * RiderApplication
  *
  * @author An Jun
  * @date 2021-05-18
  */
 @SpringBootApplication
-public class DistributedIdApplication {
+public class RiderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DistributedIdApplication.class, args);
+        SpringApplication.run(RiderApplication.class, args);
     }
 
 }

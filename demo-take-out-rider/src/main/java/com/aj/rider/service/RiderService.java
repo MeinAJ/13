@@ -22,17 +22,8 @@ public class RiderService {
     @Autowired
     private Worker worker;
 
-    public void upload(double lat, double lng, String province) {
-
-        LatLng latLng = new LatLng();
-        latLng.setLat(lat);
-        latLng.setLng(lng);
-
-        //todo 可以优化
-        worker.getQueue(province).add(latLng);
-
-        
+    public void upload(double lat, double lng, String province, String name) throws Exception {
+        worker.put(province, new LatLng(lat, lng, name));
     }
-
 
 }
