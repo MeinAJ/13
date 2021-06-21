@@ -24,8 +24,8 @@ import java.util.concurrent.*;
  * @author An Jun
  * @date 2021-06-21
  */
-@Service(value = "worker")
-public class Worker {
+@Service(value = "riderWorker")
+public class RiderWorker {
 
     @Autowired
     private RedissonClient redissonClient;
@@ -46,7 +46,7 @@ public class Worker {
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>());
 
-    public Worker() {
+    public RiderWorker() {
         init();
     }
 
