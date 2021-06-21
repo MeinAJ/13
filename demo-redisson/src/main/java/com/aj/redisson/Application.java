@@ -1,11 +1,12 @@
 package com.aj.redisson;
 
 import org.redisson.Redisson;
-import org.redisson.api.RScript;
+import org.redisson.api.GeoUnit;
+import org.redisson.api.RGeo;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("ALL")
 public class Application {
@@ -130,46 +131,75 @@ public class Application {
 //        contains = test.contains("6");
 //        System.out.println(contains);
 
-
-    }
-
-
-    {
-        //基于lua脚本实现计数限流,1000ms,限流60个请求
         Config config = new Config();
         config.useSingleServer().setAddress("redis://192.168.2.52:6379");
         final RedissonClient redisson = Redisson.create(config);
-        List<Object> keys = new ArrayList<Object>();
-        keys.add("rate:key");
-        Long count = redisson.getScript().evalSha(
-                RScript.Mode.READ_WRITE,
-                "6730ca2a89e6e2aee882ca44b0868874877a6690"/*lua脚本的sha值*/,
-                RScript.ReturnType.INTEGER,
-                keys /* KEYS */,
-                200 /* ARGV[1]*/,
-                1000/* ARGV[2]*/);
-        if (count == null || count >= 200) {
-            System.out.println("无法获取有效的令牌");
-        } else {
-            System.out.println("获取到有效的令牌");
+
+        RGeo<Object> place = redisson.getGeo("place11");
+
+        place.add(106.485617, 29.521523, "aj11");
+        place.add(106.485617, 29.521523, "aj22");
+
+//        List<Object> radius = place.radius(106.485617, 29.521523, 10, GeoUnit.KILOMETERS);
+        Map<Object, Double> objectDoubleMap = place.radiusWithDistance(107.485617, 27.521523, 1000, GeoUnit.KILOMETERS);
+        Set<Object> objects = objectDoubleMap.keySet();
+        for (Object object : objects) {
+            System.out.println(object + "," + objectDoubleMap.get(object));
         }
-        /**
-         * lua脚本如下:
-         * ------------------------------------------------------------------------------------------
-         * local count = tonumber(redis.call("incr", KEYS[1]))
-         * if (count == 1) then
-         *     redis.call("pexpire", KEYS[1], tonumber(ARGV[2]))
-         * elseif (count > tonumber(ARGV[1])) then
-         *     return -1
-         * end
-         * return cnt
-         * ------------------------------------------------------------------------------------------
-         *
-         * 将lua脚本缓存:
-         * ------------------------------------------------------------------------------------------
-         * SCRIPT LOAD <lua脚本,如上>
-         * ------------------------------------------------------------------------------------------
-         */
+//        {
+//            Config config = new Config();
+//            config.useSingleServer().setAddress("redis://192.168.2.52:6379");
+//            final RedissonClient redisson = Redisson.create(config);
+//
+//            RBucket<Object> place001 = redisson.getBucket("key1");
+//            System.out.println(place001.get());
+//        RGeo<Object> place = redisson.getGeo("place1");
+//        place.add(106.485617, 29.521523,"aj1");
+
+//        List<Object> radius = place.radius(106.485617, 29.521523, GeoUnit.KILOMETERS, 1000);
+//        for (Object o : radius) {
+//            System.out.println(o);
+//        }
+//        }
+//
+//    {
+//        //基于lua脚本实现计数限流,1000ms,限流60个请求
+//        Config config = new Config();
+//        config.useSingleServer().setAddress("redis://192.168.2.52:6379");
+//        final RedissonClient redisson = Redisson.create(config);
+//        List<Object> keys = new ArrayList<Object>();
+//        keys.add("rate:key");
+//        Long count = redisson.getScript().evalSha(
+//                RScript.Mode.READ_WRITE,
+//                "6730ca2a89e6e2aee882ca44b0868874877a6690"/*lua脚本的sha值*/,
+//                RScript.ReturnType.INTEGER,
+//                keys /* KEYS */,
+//                200 /* ARGV[1]*/,
+//                1000/* ARGV[2]*/);
+//        if (count == null || count >= 200) {
+//            System.out.println("无法获取有效的令牌");
+//        } else {
+//            System.out.println("获取到有效的令牌");
+//        }
+//        /**
+//         * lua脚本如下:
+//         * ------------------------------------------------------------------------------------------
+//         * local count = tonumber(redis.call("incr", KEYS[1]))
+//         * if (count == 1) then
+//         *     redis.call("pexpire", KEYS[1], tonumber(ARGV[2]))
+//         * elseif (count > tonumber(ARGV[1])) then
+//         *     return -1
+//         * end
+//         * return cnt
+//         * ------------------------------------------------------------------------------------------
+//         *
+//         * 将lua脚本缓存:
+//         * ------------------------------------------------------------------------------------------
+//         * SCRIPT LOAD <lua脚本,如上>
+//         * ------------------------------------------------------------------------------------------
+//         */
+//    }
+
     }
 
 }
