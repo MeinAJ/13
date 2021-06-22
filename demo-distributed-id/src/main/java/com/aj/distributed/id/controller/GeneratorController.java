@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2021-05-18
  */
 @RestController
-@RequestMapping(value = "/api/v1/id")
+@RequestMapping
 public class GeneratorController {
 
     @Autowired
@@ -26,14 +26,10 @@ public class GeneratorController {
 
     private final AtomicInteger count = new AtomicInteger(0);
 
-    @RequestMapping(value = "/generate")
+    @RequestMapping(value = "/getid")
     public Long generate() throws Exception {
         Long id = cachedGenerator.nextId();
-        if (id == null) {
-            throw new Exception("异常");
-        }
-        System.out.println(id);
-        System.out.println("id=" + id + ",sort=" + count.incrementAndGet());
+//        System.out.println("id=" + id + ",sort=" + count.incrementAndGet());
         return id;
     }
 

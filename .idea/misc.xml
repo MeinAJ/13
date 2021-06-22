@@ -32,6 +32,7 @@
         <option value="$PROJECT_DIR$/little-project-spring/pom.xml" />
         <option value="$PROJECT_DIR$/demo-netty/pom.xml" />
         <option value="$PROJECT_DIR$/demo-take-out-rider/pom.xml" />
+        <option value="$PROJECT_DIR$/reference/distributed-id/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

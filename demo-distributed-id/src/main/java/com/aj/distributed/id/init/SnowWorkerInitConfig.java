@@ -10,12 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 
 /**
  * SnowWorkerInitListener
@@ -40,8 +36,8 @@ public class SnowWorkerInitConfig {
 
     private WorkerInfo initWorkerInfo() throws Exception {
         WorkerInfo workerInfo = new WorkerInfo();
-
-        Integer workerId = getWorkerId();
+//        Integer workerId = getWorkerId();
+        Integer workerId = 1;
         if (workerId == null) {
             throw new Exception("无法获取workerId");
         }
