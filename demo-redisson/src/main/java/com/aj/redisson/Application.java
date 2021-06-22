@@ -135,7 +135,7 @@ public class Application {
         final RedissonClient redisson = Redisson.create(config);
 
         int second = LocalDateTime.now().getSecond();
-        RGeo<Object> place = redisson.getGeo("place:重庆" + second);
+        RGeo<Object> place = redisson.getGeo("place:重庆");
         GeoEntry[] data = new GeoEntry[10000];
         for (int i = 0; i < 10000; i++) {
             second = LocalDateTime.now().getSecond();
