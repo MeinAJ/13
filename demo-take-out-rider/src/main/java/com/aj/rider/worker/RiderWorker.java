@@ -42,7 +42,7 @@ public class RiderWorker {
 
     private final static int CPU = Runtime.getRuntime().availableProcessors() * 2;
 
-    private final static int SIZE = 100;
+    private final static int SIZE = 1000;
 
     private final static ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
             CPU,
@@ -56,7 +56,7 @@ public class RiderWorker {
     }
 
     private void init() {
-        SCHEDULER.scheduleWithFixedDelay(new Task(), 10000/*首次延时10s*/, 30000 /*30s执行一次*/, TimeUnit.MILLISECONDS);
+        SCHEDULER.scheduleWithFixedDelay(new Task(), 1000/*首次延时1s*/, 100 /*100ms执行一次*/, TimeUnit.MILLISECONDS);
     }
 
     public void put(String province, LatLng latLng) throws Exception {

@@ -1,12 +1,11 @@
 package com.aj.redisson;
 
 import org.redisson.Redisson;
-import org.redisson.api.GeoUnit;
+import org.redisson.api.GeoEntry;
 import org.redisson.api.RGeo;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @SuppressWarnings("ALL")
 public class Application {
@@ -135,17 +134,20 @@ public class Application {
         config.useSingleServer().setAddress("redis://192.168.2.52:6379");
         final RedissonClient redisson = Redisson.create(config);
 
-        RGeo<Object> place = redisson.getGeo("place11");
-
-        place.add(106.485617, 29.521523, "aj11");
-        place.add(106.485617, 29.521523, "aj22");
-
-//        List<Object> radius = place.radius(106.485617, 29.521523, 10, GeoUnit.KILOMETERS);
-        Map<Object, Double> objectDoubleMap = place.radiusWithDistance(107.485617, 27.521523, 1000, GeoUnit.KILOMETERS);
-        Set<Object> objects = objectDoubleMap.keySet();
-        for (Object object : objects) {
-            System.out.println(object + "," + objectDoubleMap.get(object));
+        int second = LocalDateTime.now().getSecond();
+        RGeo<Object> place = redisson.getGeo("place:重庆" + second);
+        GeoEntry[] data = new GeoEntry[10000];
+        for (int i = 0; i < 10000; i++) {
+            second = LocalDateTime.now().getSecond();
+            GeoEntry geoEntry = new GeoEntry(106.485617, 29.521523, second);
+            data[i] = geoEntry;
         }
+
+        long begin = System.currentTimeMillis();
+        place.add(data);
+        long end = System.currentTimeMillis();
+        System.out.println(end - begin + "ms");
+
 //        {
 //            Config config = new Config();
 //            config.useSingleServer().setAddress("redis://192.168.2.52:6379");
@@ -201,5 +203,7 @@ public class Application {
 //    }
 
     }
+
+
 
 }
