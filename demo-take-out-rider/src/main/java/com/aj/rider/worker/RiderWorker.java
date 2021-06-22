@@ -13,10 +13,15 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import static java.util.concurrent.Executors.newScheduledThreadPool;
 
 /**
  * Worker
@@ -31,37 +36,37 @@ public class RiderWorker {
     private RedissonClient redissonClient;
 
     private final static ConcurrentHashMap<String /*province*/,
-            LinkedBlockingQueue<LatLng>/*queue*/> map = new ConcurrentHashMap<>();
+            LinkedBlockingQueue<LatLng>/*queue*/> MAP = new ConcurrentHashMap<>();
 
-    private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final static ScheduledExecutorService SCHEDULER = newScheduledThreadPool(1);
 
-    private final static int cpu = Runtime.getRuntime().availableProcessors() * 2;
+    private final static int CPU = Runtime.getRuntime().availableProcessors() * 2;
 
-    private final static int size = 100;
+    private final static int SIZE = 100;
 
-    private final static ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            cpu,
-            cpu,
+    private final static ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
+            CPU,
+            CPU,
             10,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>());
+            new LinkedBlockingQueue<>(), (ThreadFactory) Thread::new);
 
     public RiderWorker() {
         init();
     }
 
     private void init() {
-        scheduler.scheduleWithFixedDelay(new Task(), 10000/*首次延时10s*/, 30000 /*30s执行一次*/, TimeUnit.MILLISECONDS);
+        SCHEDULER.scheduleWithFixedDelay(new Task(), 10000/*首次延时10s*/, 30000 /*30s执行一次*/, TimeUnit.MILLISECONDS);
     }
 
     public void put(String province, LatLng latLng) throws Exception {
-        if (executor.isShutdown()) {
+        if (EXECUTOR.isShutdown()) {
             throw new Exception("无法消费");
         }
-        LinkedBlockingQueue<LatLng> queue = map.get(province);
+        LinkedBlockingQueue<LatLng> queue = MAP.get(province);
         if (queue == null) {
             queue = new LinkedBlockingQueue<>();
-            map.putIfAbsent(province, queue);
+            MAP.putIfAbsent(province, queue);
         }
         queue.add(latLng);
     }
@@ -72,27 +77,29 @@ public class RiderWorker {
         public void run() {
             System.out.println("开始执行任务，往redis中存入数据，" + System.currentTimeMillis() / 1000);
             ConcurrentHashMap.KeySetView<String,
-                    LinkedBlockingQueue<LatLng>> provinceKeys = map.keySet();
+                    LinkedBlockingQueue<LatLng>> provinceKeys = MAP.keySet();
             for (String province : provinceKeys) {
-                LinkedBlockingQueue<LatLng> queue = map.get(province);
+                LinkedBlockingQueue<LatLng> queue = MAP.get(province);
                 if (queue != null && queue.size() > 0) {
                     List<LatLng> dataList = new ArrayList<>();
                     LatLng data;
                     int count = 0;
-                    while ((data = queue.poll()) != null && count++ <= size) {
+                    while ((data = queue.poll()) != null && count++ <= SIZE) {
                         dataList.add(data);
                     }
                     if (!CollectionUtils.isEmpty(dataList)) {
-                        executor.execute(new BatchTask(dataList, province));
+                        EXECUTOR.execute(new BatchTask(dataList, province));
                     }
                 }
             }
         }
+
     }
 
     class BatchTask implements Runnable {
 
         List<LatLng> dataList;
+
         String province;
 
         BatchTask(List<LatLng> dataList, String province) {
@@ -115,5 +122,7 @@ public class RiderWorker {
                 dataList = null;
             }
         }
+
     }
+
 }
