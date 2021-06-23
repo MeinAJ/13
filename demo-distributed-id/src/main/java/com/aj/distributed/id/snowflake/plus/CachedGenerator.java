@@ -51,7 +51,7 @@ public class CachedGenerator {
 
     private final int capacity = 1 << sequenceBits;
 
-    private final int threshold = capacity >> 1;
+    private final int threshold = capacity >> 3;
 
     private final Long[] ringBuffer = new Long[capacity];
 
@@ -80,8 +80,10 @@ public class CachedGenerator {
             ringBuffer[index] = id;
             ringBufferFlag[index] = true;
         }
+        System.out.println("capacity=" + capacity);
+        System.out.println("threshold=" + threshold);
         //定时1s调度去检查可用id少于百分之50时，就去生成百分之50放入缓存中
-        threadPoolExecutor.scheduleWithFixedDelay(new RingBufferFillTask(), 0, 1000, TimeUnit.MILLISECONDS);
+        threadPoolExecutor.scheduleWithFixedDelay(new RingBufferFillTask(), 0, 100, TimeUnit.MILLISECONDS);
     }
 
     private long idGenerator(long prefix, int index) {
@@ -93,7 +95,7 @@ public class CachedGenerator {
         @Override
         public void run() {
             if (generating.compareAndSet(false, true)) {
-                if (emptyMoreThan50()) {
+                if (emptyMoreThanThreshold()) {
                     System.out.println("已使用=" + used.get());
                     //开始缓存一半的id
                     long prefix = getPrefix();
@@ -110,13 +112,13 @@ public class CachedGenerator {
 
                     int usedCount = used.get();
                     //cas设置已使用id
-                    while (used.compareAndSet(usedCount, (usedCount - threshold))) {
+                    while (!used.compareAndSet(usedCount, (usedCount - threshold))) {
                         //do nothing
-                        //空转
+                        usedCount = used.get();
                     }
                     System.out.println("生成id后,已使用=" + used.get());
                 }
-                generating.set(false);
+                generating.compareAndSet(true, false);
             }
         }
 
@@ -148,8 +150,8 @@ public class CachedGenerator {
                 int usedCount = used.get();
                 while (used.compareAndSet(usedCount, (usedCount + 1))) {
                 }
-                System.out.println("cursor=" + cursor);
-                System.out.println("used=" + used.get());
+//                System.out.println("cursor=" + cursor);
+//                System.out.println("used=" + used.get());
                 return ringBuffer[cursor++];
             }
             return null;
@@ -165,7 +167,7 @@ public class CachedGenerator {
         return index >= capacity || index < 0;
     }
 
-    private boolean emptyMoreThan50() {
+    private boolean emptyMoreThanThreshold() {
         return used.get() >= threshold;
     }
 

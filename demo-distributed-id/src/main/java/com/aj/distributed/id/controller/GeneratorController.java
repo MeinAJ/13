@@ -26,13 +26,15 @@ public class GeneratorController {
 
     private final AtomicInteger count = new AtomicInteger(0);
 
+    final SnowFlake snowFlake = new SnowFlake(1, 1);
+
     @RequestMapping(value = "/generate")
     public Long generate() throws Exception {
-        Long id = cachedGenerator.nextId();
+        Long id = snowFlake.nextId();
+//        Long id = cachedGenerator.nextId();
         if (id == null) {
             throw new Exception("异常");
         }
-        System.out.println(id);
         System.out.println("id=" + id + ",sort=" + count.incrementAndGet());
         return id;
     }
