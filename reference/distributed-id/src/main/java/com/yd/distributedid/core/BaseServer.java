@@ -43,7 +43,7 @@ public abstract class BaseServer implements Server {
                 return new Thread(r, "BOSS_EVENTLOOPGROUP_" + index.incrementAndGet());
             }
         });
-        workGroup = new NioEventLoopGroup(4, new ThreadFactory() {
+        workGroup = new NioEventLoopGroup(3, new ThreadFactory() {
             private AtomicInteger index = new AtomicInteger(0);
 
             @Override

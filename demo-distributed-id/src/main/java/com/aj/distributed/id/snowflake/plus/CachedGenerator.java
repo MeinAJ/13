@@ -6,6 +6,7 @@
 package com.aj.distributed.id.snowflake.plus;
 
 import com.aj.distributed.id.init.WorkerInfo;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -44,11 +45,6 @@ public class CachedGenerator {
     //  时间毫秒数左移22位
     private final long timestampLeftShift = sequenceBits + workerIdBits;
 
-    /**
-     * 当使用了超过百分之50的时候,就不填满
-     */
-    private final int usedCapacity = 50;
-
     private final int capacity = 1 << sequenceBits;
 
     private final int threshold = capacity >> 3;
@@ -83,7 +79,7 @@ public class CachedGenerator {
         System.out.println("capacity=" + capacity);
         System.out.println("threshold=" + threshold);
         //定时1s调度去检查可用id少于百分之50时，就去生成百分之50放入缓存中
-        threadPoolExecutor.scheduleWithFixedDelay(new RingBufferFillTask(), 0, 100, TimeUnit.MILLISECONDS);
+        threadPoolExecutor.scheduleWithFixedDelay(new RingBufferFillTask(), 0, 200, TimeUnit.MILLISECONDS);
     }
 
     private long idGenerator(long prefix, int index) {
@@ -113,10 +109,9 @@ public class CachedGenerator {
                     int usedCount = used.get();
                     //cas设置已使用id
                     while (!used.compareAndSet(usedCount, (usedCount - threshold))) {
-                        //do nothing
                         usedCount = used.get();
                     }
-                    System.out.println("生成id后,已使用=" + used.get());
+//                    System.out.println("生成id后,已使用=" + used.get());
                 }
                 generating.compareAndSet(true, false);
             }
@@ -138,8 +133,8 @@ public class CachedGenerator {
 
     public Long nextId() throws Exception {
         //加锁
+        nextIdLock.lock();
         try {
-            nextIdLock.lock();
             if (isOutOfBound(cursor)) {
                 cursor = 0;
             }
