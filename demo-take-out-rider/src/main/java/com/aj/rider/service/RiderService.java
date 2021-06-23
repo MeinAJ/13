@@ -6,7 +6,7 @@
 package com.aj.rider.service;
 
 import com.aj.rider.model.LatLng;
-import com.aj.rider.worker.RiderWorker;
+import com.aj.rider.worker.RiderWorkerV1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class RiderService {
 
     @Autowired
-    private RiderWorker riderWorker;
+    private RiderWorkerV1 riderWorker;
 
     public void upload(double lat, double lng, String province, String name) throws Exception {
         riderWorker.put(province, new LatLng(lat, lng, name));

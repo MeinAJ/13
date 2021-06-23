@@ -25,7 +25,7 @@ import static java.util.concurrent.Executors.newScheduledThreadPool;
  * @date 2021-06-21
  */
 @Service(value = "riderWorker")
-public class RiderWorker {
+public class RiderWorkerV1 {
 
     @Autowired
     private RedissonClient redissonClient;
@@ -46,7 +46,7 @@ public class RiderWorker {
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(), (ThreadFactory) Thread::new);
 
-    public RiderWorker() {
+    public RiderWorkerV1() {
         init();
     }
 
