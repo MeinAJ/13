@@ -26,7 +26,7 @@ public class GeneratorController {
 
     private final AtomicInteger count = new AtomicInteger(0);
 
-    @RequestMapping(value = "/generate")
+    @RequestMapping(value = "/getid")
     public Long generate() throws Exception {
         Long id = cachedGenerator.nextId();
         if (id == null) {
