@@ -1016,8 +1016,8 @@ public class MQClientAPIImpl {
         RemotingCommand request = RemotingCommand.createRequestCommand(RequestCode.HEART_BEAT, null);
         request.setLanguage(clientConfig.getLanguage());
         request.setBody(heartbeatData.encode());
-        RemotingCommand response = this.remotingClient.invokeSync(addr, request, timeoutMillis);
-        assert response != null;
+        RemotingCommand response = this.remotingClient.invokeSync(addr, request, timeoutMillis);//发送心跳了
+        assert response != null;//得到响应
         switch (response.getCode()) {
             case ResponseCode.SUCCESS: {
                 return response.getVersion();
