@@ -16,18 +16,19 @@ import lombok.Data;
 @Data
 public class LatLng {
 
+    private String province;
+
     private Double lat;
 
     private Double lng;
 
     private String name;
 
-    private boolean isValid;
-
-    public LatLng(Double lat, Double lng, String name) {
+    public LatLng(Double lat, Double lng, String name, String province) {
         this.lat = lat;
         this.lng = lng;
         this.name = name;
-        this.isValid = lat != null && lng != null && name != null;
+        this.province = province;
     }
+
 }

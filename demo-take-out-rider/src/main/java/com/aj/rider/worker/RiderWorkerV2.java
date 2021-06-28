@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -23,14 +25,13 @@ import java.util.concurrent.TimeUnit;
  * @date 2021-06-21
  */
 @SuppressWarnings("ALL")
-@Service(value = "riderWorker")
+@Service(value = "riderWorkerV2")
 public class RiderWorkerV2 {
 
     @Autowired
     private RedissonClient redissonClient;
 
-    private final static ConcurrentHashMap<String /*province*/,
-            LinkedBlockingQueue<LatLng>/*queue*/> MAP = new ConcurrentHashMap<>();
+    private final static LinkedBlockingQueue<LatLng> QUEUE = new LinkedBlockingQueue<>();
 
     private final static int CPU = Runtime.getRuntime().availableProcessors() * 2;
 
@@ -49,25 +50,34 @@ public class RiderWorkerV2 {
 
     private void init() {
         new Thread(() -> {
+            int count = 0;
+            Map<String, List<LatLng>> map = new HashMap<>();
+            long maxWaitMillis = 100;
             while (true) {
-                System.out.println("开始执行任务，往redis中存入数据，" + System.currentTimeMillis() / 1000);
-                ConcurrentHashMap.KeySetView<String, LinkedBlockingQueue<LatLng>> provinceKeys = MAP.keySet();
-                for (String province : provinceKeys) {
-                    LinkedBlockingQueue<LatLng> queue = MAP.get(province);
-                    if (queue != null && queue.size() > 0) {
-                        List<LatLng> dataList = new ArrayList<>();
-                        LatLng data;
-                        int count = 0;
-                        while ((data = queue.poll()) != null && count++ <= SIZE) {
-                            dataList.add(data);
-                        }
-                        if (!CollectionUtils.isEmpty(dataList)) {
-                            EXECUTOR.execute(new BatchTask(dataList, province));
-                        }
-                    }
-                }
                 try {
-                    Thread.sleep(1000);
+                    LatLng data;
+                    long beginTime = System.currentTimeMillis();
+                    //达到1000个数据时或者等待时间大于了100ms时,就要批次保存了
+                    while (count++ < 1000
+                            && (data = QUEUE.poll(maxWaitMillis, TimeUnit.MILLISECONDS)) != null
+                            && System.currentTimeMillis() - beginTime <= maxWaitMillis) {
+                        String province = data.getProvince();
+                        List<LatLng> dataList = map.get(province);
+                        if (CollectionUtils.isEmpty(dataList)) {
+                            dataList = new ArrayList<>();
+                            map.put(province, dataList);
+                        }
+                        dataList.add(data);
+                    }
+                    Set<String> provinceSet = map.keySet();
+                    for (String province : provinceSet) {
+                        List<LatLng> datalist = map.get(province);
+                        //执行批量任务
+                        EXECUTOR.execute(new BatchTask(datalist, province));
+                    }
+                    //复位
+                    count = 0;
+                    map = new HashMap<>();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -79,12 +89,7 @@ public class RiderWorkerV2 {
         if (EXECUTOR.isShutdown()) {
             throw new Exception("无法消费");
         }
-        LinkedBlockingQueue<LatLng> queue = MAP.get(province);
-        if (queue == null) {
-            queue = new LinkedBlockingQueue<>();
-            MAP.putIfAbsent(province, queue);
-        }
-        queue.add(latLng);
+        QUEUE.add(latLng);
     }
 
     class BatchTask implements Runnable {
