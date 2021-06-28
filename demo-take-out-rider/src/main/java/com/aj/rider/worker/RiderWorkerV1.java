@@ -63,7 +63,7 @@ public class RiderWorkerV1 {
             queue = new LinkedBlockingQueue<>();
             MAP.putIfAbsent(province, queue);
         }
-        queue.add(latLng);
+        queue.offer(latLng, 0, TimeUnit.MILLISECONDS);
     }
 
     class Task implements Runnable {

@@ -37,6 +37,8 @@ public class RiderWorkerV2 {
 
     private final static int SIZE = 1000;
 
+    private final static long MAX_WAIT_MILLIS = 100;
+
     private final static ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
             CPU,
             CPU,
@@ -52,15 +54,14 @@ public class RiderWorkerV2 {
         new Thread(() -> {
             int count = 0;
             Map<String, List<LatLng>> map = new HashMap<>();
-            long maxWaitMillis = 100;
             while (true) {
                 try {
                     LatLng data;
                     long beginTime = System.currentTimeMillis();
                     //达到1000个数据时或者等待时间大于了100ms时,就要批次保存了
-                    while (count++ < 1000
-                            && (data = QUEUE.poll(maxWaitMillis, TimeUnit.MILLISECONDS)) != null
-                            && System.currentTimeMillis() - beginTime <= maxWaitMillis) {
+                    while (count++ < SIZE
+                            && (data = QUEUE.poll(MAX_WAIT_MILLIS, TimeUnit.MILLISECONDS)) != null
+                            && System.currentTimeMillis() - beginTime <= MAX_WAIT_MILLIS) {
                         String province = data.getProvince();
                         List<LatLng> dataList = map.get(province);
                         if (CollectionUtils.isEmpty(dataList)) {
@@ -73,11 +74,12 @@ public class RiderWorkerV2 {
                     for (String province : provinceSet) {
                         List<LatLng> datalist = map.get(province);
                         //执行批量任务
+                        //todo 这里可以优化成,根据province进行hash,分配给特定的线程处理
                         EXECUTOR.execute(new BatchTask(datalist, province));
                     }
                     //复位
                     count = 0;
-                    map = new HashMap<>();
+                    map.clear();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -89,7 +91,7 @@ public class RiderWorkerV2 {
         if (EXECUTOR.isShutdown()) {
             throw new Exception("无法消费");
         }
-        QUEUE.add(latLng);
+        QUEUE.offer(latLng, 0, TimeUnit.MILLISECONDS);
     }
 
     class BatchTask implements Runnable {
