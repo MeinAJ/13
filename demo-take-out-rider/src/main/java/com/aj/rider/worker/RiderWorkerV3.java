@@ -1,7 +1,6 @@
 package com.aj.rider.worker;
 
 import com.aj.rider.model.LatLng;
-import com.alibaba.fastjson.JSON;
 import org.redisson.api.GeoEntry;
 import org.redisson.api.RGeo;
 import org.redisson.api.RedissonClient;
@@ -28,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2021-06-21
  */
 @SuppressWarnings("ALL")
-@Service(value = "riderWorkerV2")
+@Service(value = "riderWorkerV3")
 public class RiderWorkerV3 {
 
     @Autowired
@@ -40,7 +39,7 @@ public class RiderWorkerV3 {
 
     private final static int SIZE = 1000;
 
-    private final static long MAX_WAIT_MILLIS = 1000;
+    private final static long MAX_WAIT_MILLIS = 50;
 
     private final static int MAX_BATCH_TASK_WAIT_SIZE = 10;
 
@@ -54,23 +53,27 @@ public class RiderWorkerV3 {
     private void initThreadExecutors() {
         int threads = THREADS;
         AtomicInteger threadId = new AtomicInteger(0);
+        executorServices = new ThreadPoolExecutor[threads];
         for (int i = 0; i < threads; i++) {
             executorServices[i] = new ThreadPoolExecutor(
                     1,
                     1,
                     0L,
                     TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<Runnable>(MAX_BATCH_TASK_WAIT_SIZE), new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "batch-task-thread-" + threadId.incrementAndGet());
-                }
-            }, new RejectedExecutionHandler() {
-                @Override
-                public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                    //直接抛弃
-                }
-            });
+                    new LinkedBlockingQueue<Runnable>(MAX_BATCH_TASK_WAIT_SIZE),
+                    new ThreadFactory() {
+                        @Override
+                        public Thread newThread(Runnable r) {
+                            return new Thread(r, "batch-task-thread-" + threadId.incrementAndGet());
+                        }
+                    },
+                    new RejectedExecutionHandler() {
+                        @Override
+                        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                            //直接抛弃
+                            System.out.println("handler error batch task " + System.currentTimeMillis());
+                        }
+                    });
         }
     }
 
@@ -143,9 +146,9 @@ public class RiderWorkerV3 {
                     LatLng latLng = dataList.get(i);
                     data[i] = new GeoEntry(latLng.getLat(), latLng.getLng(), latLng.getName());
                 }
-                System.out.println(JSON.toJSONString(data));
                 place.add(data);
                 dataList = null;
+                System.out.println("data.length=" + data.length);
             }
         }
 

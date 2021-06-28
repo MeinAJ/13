@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2021-06-21
  */
 @SuppressWarnings("ALL")
-@Service(value = "riderWorkerV2")
+//@Service(value = "riderWorkerV2")
 public class RiderWorkerV2 {
 
     @Autowired
@@ -115,7 +115,6 @@ public class RiderWorkerV2 {
                     GeoEntry geoEntry = new GeoEntry(latLng.getLat(), latLng.getLng(), latLng.getName());
                     data[i] = geoEntry;
                 }
-                System.out.println(JSON.toJSONString(data));
                 place.add(data);
                 dataList = null;
             }

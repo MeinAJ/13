@@ -5,7 +5,8 @@
 
 package com.aj.rider.controller;
 
-import com.aj.rider.service.RiderService;
+import com.aj.rider.model.LatLng;
+import com.aj.rider.worker.RiderWorkerV3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,15 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 public class RiderController {
 
+//    @Autowired
+//    private RiderWorker riderWorker;
+
     @Autowired
-    private RiderService riderService;
+    private RiderWorkerV3 riderWorkerV3;
 
     @RequestMapping("/rider")
     public void upload(@RequestParam(value = "lat") double lat,
                        @RequestParam(value = "lng") double lng,
                        @RequestParam(value = "province") String province,
                        @RequestParam(value = "name") String name) throws Exception {
-        riderService.upload(lat, lng, province, name);
+        System.out.println(lat + lng + province + name);
+//        riderWorker.upload(lat, lng, province, name);
+        riderWorkerV3.put(province, new LatLng(lat, lng, province, name));
     }
 
 }

@@ -24,7 +24,7 @@ import static java.util.concurrent.Executors.newScheduledThreadPool;
  * @author An Jun
  * @date 2021-06-21
  */
-@Service(value = "riderWorker")
+//@Service(value = "riderWorkerV1")
 public class RiderWorkerV1 {
 
     @Autowired
