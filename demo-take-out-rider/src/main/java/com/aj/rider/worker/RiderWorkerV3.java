@@ -33,7 +33,7 @@ public class RiderWorkerV3 {
     @Autowired
     private RedissonClient redissonClient;
 
-    private final static LinkedBlockingQueue<LatLng> QUEUE = new LinkedBlockingQueue<>();
+    private final static LinkedBlockingQueue<LatLng> QUEUE = new LinkedBlockingQueue<>(20000);
 
     private final static int THREADS = Runtime.getRuntime().availableProcessors() * 2;
 
