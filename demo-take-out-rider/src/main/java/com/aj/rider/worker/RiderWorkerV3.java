@@ -93,7 +93,7 @@ public class RiderWorkerV3 {
                     LatLng data;
                     long beginTime = System.currentTimeMillis();
                     //达到1000个数据时或者等待时间大于了1000ms时,就要批次保存了
-                    while (count++ < SIZE
+                    while (count++ <= SIZE
                             && (data = QUEUE.poll(MAX_WAIT_MILLIS, TimeUnit.MILLISECONDS)) != null
                             && System.currentTimeMillis() - beginTime <= MAX_WAIT_MILLIS) {
                         String province = data.getProvince();
@@ -121,7 +121,7 @@ public class RiderWorkerV3 {
         }).start();
     }
 
-    public void put(String province, LatLng latLng) throws Exception {
+    public void put(LatLng latLng) throws Exception {
         //等待0s,相当于满了后,直接抛弃掉数据
         QUEUE.offer(latLng, 0, TimeUnit.MILLISECONDS);
     }

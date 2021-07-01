@@ -29,7 +29,7 @@ public class RiderController {
                        @RequestParam(value = "name") String name) throws Exception {
         System.out.println(lat + lng + province + name);
 //        riderWorker.upload(lat, lng, province, name);
-        riderWorkerV3.put(province, new LatLng(lat, lng, province, name));
+        riderWorkerV3.put(new LatLng(lat, lng, province, name));
     }
 
 }
