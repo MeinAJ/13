@@ -26,7 +26,6 @@ public class Leetcode5 {
         if (s == null || s.length() < 2) {
             return s;
         }
-
         char[] ss = s.toCharArray();
         //先将每个字符插入一个#号
         //创建一个chars数组,保存每个字符前后插入一个#的新数组
