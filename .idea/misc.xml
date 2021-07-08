@@ -34,6 +34,7 @@
         <option value="$PROJECT_DIR$/demo-take-out-rider/pom.xml" />
         <option value="$PROJECT_DIR$/reference/distributed-id/pom.xml" />
         <option value="$PROJECT_DIR$/demo-yuque/pom.xml" />
+        <option value="$PROJECT_DIR$/demo-jedis/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

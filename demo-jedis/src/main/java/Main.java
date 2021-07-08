@@ -1,18 +1,20 @@
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        JedisShardInfo shardInfo = new JedisShardInfo("192.168.0.103", "7001");
+//        JedisShardInfo shardInfo = new JedisShardInfo("192.168.0.103", "7001");
+        JedisShardInfo shardInfo = new JedisShardInfo("192.168.2.52", "6379");
 //        shardInfo.setPassword("redis-pass");
         Jedis jedis = new Jedis(shardInfo);
-        Long test = jedis.incrBy("test", 1);
-        System.out.println(test);
+//        Long test = jedis.incrBy("test", 1);
+//        System.out.println(test);
+
+        String info = jedis.info();
+        System.out.println("info=" + info);
+
 //        jedis.setnx("k1", "v1");
 //        System.out.println(jedis.get("k1"));
 //
@@ -74,25 +76,25 @@ public class Main {
 //        }
 //    }
 
-        jedis.setbit("setbit", 0, false);
-        jedis.setbit("setbit", 1, false);
-        jedis.setbit("setbit", 2, false);
-        jedis.setbit("setbit", 3, false);
-        jedis.setbit("setbit", 4, true);
-        jedis.setbit("setbit", 5, true);
-        jedis.setbit("setbit", 6, true);
-        jedis.setbit("setbit", 7, true);
-
-        String luaStr =
-                "for i=2,ARGV[1],1 do " +
-                    "if redis.call('getbit', KEYS[1], ARGV[i]) == 1 then " +
-                        "return i " +
-                    "end;" +
-                "end";
+//        jedis.setbit("setbit", 0, false);
+//        jedis.setbit("setbit", 1, false);
+//        jedis.setbit("setbit", 2, false);
+//        jedis.setbit("setbit", 3, false);
+//        jedis.setbit("setbit", 4, true);
+//        jedis.setbit("setbit", 5, true);
+//        jedis.setbit("setbit", 6, true);
+//        jedis.setbit("setbit", 7, true);
+//
+//        String luaStr =
+//                "for i=2,ARGV[1],1 do " +
+//                    "if redis.call('getbit', KEYS[1], ARGV[i]) == 1 then " +
+//                        "return i " +
+//                    "end;" +
+//                "end";
 //        String luaStr = "getbit KEYS[1]";
 //        String luaStr = "return {KEYS[1],KEYS[1],ARGV[1],ARGV[2]}";
-        Object result = jedis.eval(luaStr, Arrays.asList("setbit"), Arrays.asList("6", "0", "1", "2", "3", "7"));
-        System.out.println(result);
+//        Object result = jedis.eval(luaStr, Arrays.asList("setbit"), Arrays.asList("6", "0", "1", "2", "3", "7"));
+//        System.out.println(result);
     }
 
 }
