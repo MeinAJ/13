@@ -13,6 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @author An Jun
  * @date 2021-07-13
  */
+@SuppressWarnings("ALL")
 public class ArrayBlockingQueueMain {
 
     public static void main(String[] args) throws InterruptedException {
@@ -22,7 +23,7 @@ public class ArrayBlockingQueueMain {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
                     queue.put("3");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -34,7 +35,7 @@ public class ArrayBlockingQueueMain {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(4000);
                     queue.put("4");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
