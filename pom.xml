@@ -17,6 +17,6 @@
         <module>demo-netty</module>
         <module>demo-take-out-rider</module>
         <module>demo-yuque</module>
-        <module>demo-sec-kill</module>
+        <module>demo-openjdk</module>
     </modules>
 </project>
