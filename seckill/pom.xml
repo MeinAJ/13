@@ -15,6 +15,7 @@
         <module>seckill-flash-sale</module>
         <module>seckill-order</module>
         <module>seckill-eureka-server</module>
+        <module>seckill-common</module>
     </modules>
 
 </project>
