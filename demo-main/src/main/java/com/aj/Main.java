@@ -1,13 +1,11 @@
 package com.aj;
 
-import com.dataofx.file.zip.ZipUtil;
 import java.io.IOException;
 
 @SuppressWarnings("ALL")
 public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        ZipUtil.zipDirectory("D:\\新建文件夹", "D:\\新建文件夹.zip");
 
 //        ReentrantLock lock = new ReentrantLock();
 //        Condition condition = lock.newCondition();
