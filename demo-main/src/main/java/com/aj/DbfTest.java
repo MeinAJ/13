@@ -55,15 +55,29 @@ public class DbfTest {
         fieldList.add(map02);
         fieldList.add(map03);
 
-        createDbf(PATH, fieldList, CHARSET_GBK);
+//        createDbf(PATH, fieldList, CHARSET_GBK);
 
-        writeDbf(PATH, getData(), CHARSET_GBK);
+        List<String> headList = new ArrayList<>();
+        headList.add("姓名");
+        headList.add("年龄");
+        headList.add("性别");
 
-        List<Map<String, String>> maps = readDbf(PATH, CHARSET_GBK);
-        for (Map<String, String> entity : maps) {
-            String data = "[" + entity.get("姓名") + "," + entity.get("年龄") + "," + entity.get("性别") + "]";
-            System.out.println(data);
-        }
+        List<List<String>> rowList = new ArrayList<>();
+        List<String> row1 = new ArrayList<>();
+
+        row1.add("1");
+        row1.add("2");
+        row1.add("3");
+
+        rowList.add(row1);
+
+        writeDbf(PATH, headList, rowList, CHARSET_GBK);
+
+//        List<Map<String, String>> maps = readDbf(PATH, CHARSET_GBK);
+//        for (Map<String, String> entity : maps) {
+//            String data = "[" + entity.get("姓名") + "," + entity.get("年龄") + "," + entity.get("性别") + "]";
+//            System.out.println(data);
+//        }
     }
 
 //    private static List<Map<String, String>> getData() {
@@ -218,13 +232,47 @@ public class DbfTest {
      *
      * @param path:dbf文件路径
      * @param rowList:要写入的记录行
+     */
+    public static void writeDbf(String path, List<String> headList, List<List<String>> rowList, String charsetName) {
+        DBFWriter dbfWriter = new DBFWriter(new File(path), Charset.forName(charsetName));
+        DBFField[] fields = new DBFField[headList.size()];
+        int index = 0;
+        for (String head : headList) {
+            DBFField field = new DBFField();
+            //字段名称
+            field.setName(head);
+            //指定字段类型为字符串
+            field.setType(DBFDataType.CHARACTER);
+            //指定长度
+            field.setLength(20);
+            fields[index++] = field;
+        }
+        dbfWriter.setFields(fields);
+        //获取字段
+        for (List<String> rows : rowList) {
+            Object[] rowData = new Object[headList.size()];
+            for (int i = 0; i < headList.size(); i++) {
+                rowData[i] = rows.get(i);
+            }
+            //添加记录（此时并没有写入文件）
+            dbfWriter.addRecord(rowData);
+        }
+        //写入dbf文件并保存关闭
+        dbfWriter.close();
+    }
+
+    /**
+     * 写dbf文件
+     *
+     * @param path:dbf文件路径
+     * @param rowList:要写入的记录行
      * @param charsetName：字符集
      */
-    public static void writeDbf(String path, List<Map<String, String>> rowList, String charsetName)
+    public static void writeDbfV2(String path, List<Map<String, String>> rowList, String charsetName)
             throws IOException {
         DBFWriter dbfWriter = new DBFWriter(new File(path));
         //获取字段
-        String[] fieldName = getFieldName(path, charsetName);
+        String[] fieldName = {"姓名", "年龄", "性别"};
         for (Map<String, String> rowMap : rowList) {
             Object[] rowData = new Object[fieldName.length];
             for (int i = 0; i < rowData.length; i++) {
