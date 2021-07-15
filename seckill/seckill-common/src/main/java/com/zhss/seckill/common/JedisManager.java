@@ -2,15 +2,16 @@ package com.zhss.seckill.common;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
-
 import java.util.HashMap;
 
 public class JedisManager {
 
-    private HashMap<String, Jedis> jedisMap = new HashMap<String, Jedis>();
+    private final HashMap<String, Jedis> jedisMap = new HashMap<String, Jedis>();
 
     static class Singleton {
+
         static JedisManager instance = new JedisManager();
+
     }
 
     public static JedisManager getInstance() {
@@ -23,7 +24,7 @@ public class JedisManager {
             synchronized (this) {
                 if (jedisMap.get(cacheKey) == null) {
                     JedisShardInfo shardInfo = new JedisShardInfo(host, port);
-                    shardInfo.setPassword("redis");
+                    shardInfo.setPassword(password);
                     Jedis jedis = new Jedis(shardInfo);
                     jedisMap.put(cacheKey, jedis);
                 }
