@@ -2032,11 +2032,11 @@ public abstract class AbstractQueuedSynchronizer
         public final void await() throws InterruptedException {
             if (Thread.interrupted())
                 throw new InterruptedException();
-            Node node = addConditionWaiter();
-            int savedState = fullyRelease(node);
+            Node node = addConditionWaiter();//添加到condition队列中
+            int savedState = fullyRelease(node);//释放锁
             int interruptMode = 0;
             while (!isOnSyncQueue(node)) {
-                LockSupport.park(this);
+                LockSupport.park(this);//在condition队列中,就阻塞在这里
                 if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
                     break;
             }
