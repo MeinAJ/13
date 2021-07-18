@@ -35,7 +35,8 @@ public class NameNodeServiceActor {
 			try {
 				// 发送rpc接口调用请求到NameNode去进行注册
 				System.out.println("发送请求到NameNode进行注册.......");  
-				Thread.sleep(1000);  
+				Thread.sleep(1000);
+
 				latch.countDown();  
 			} catch (Exception e) {
 				e.printStackTrace();
